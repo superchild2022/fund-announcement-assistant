@@ -192,17 +192,31 @@ def build_fallback(case: dict, announcement: dict, extracted: dict, analysis: di
         }
 
     return {
-        "headline": analysis.get("headline", "公告处理结果"),
+        "headline": analysis.get("headline", "公告已读取，暂未配置专用规则"),
         "fact_summary": fact_summary,
         "impact_summary": impact_summary,
-        "cs_short_reply": "暂不支持该公告类型的自动生成，请人工处理。",
-        "cs_full_reply": "暂不支持该公告类型的自动生成，请人工处理。",
-        "app_push": {"title": "公告处理结果", "body": "暂不支持该公告类型。"},
+        "cs_short_reply": (
+            "该公告类型暂未配置专用客服口径。建议先人工阅读公告全文，确认影响后再回复用户；"
+            "不要基于通用抽取结果做承诺。基金有风险，投资需谨慎。"
+        ),
+        "cs_full_reply": (
+            "该公告类型暂未配置专用抽取模板和客服口径。系统已完成通用信息抽取，但无法自动判断"
+            "金额、日期、适用范围等关键影响。建议运营人员人工阅读公告全文，确认影响并补充处理；"
+            "对外回复前请由合规复核。基金有风险，投资需谨慎，以上不构成投资建议。"
+        ),
+        "app_push": {
+            "title": "公告处理提示",
+            "body": "该公告类型暂未配置专用模板，请人工复核后再发布。基金有风险，投资需谨慎。",
+        },
         "faq": [],
-        "ops_checklist": ["人工复核公告并补充处理"],
-        "compliance_notes": compliance_notes,
+        "ops_checklist": [
+            "人工阅读公告全文并确认公告类型",
+            "确认是否需要更新页面、系统或渠道口径",
+            "如需长期支持，补充该类型的抽取 Schema、规则和话术模板",
+        ],
+        "compliance_notes": compliance_notes + ["通用抽取结果不作为对外发布口径"],
         "missing_info": missing_info,
-        "sensitive_question_handling": "转人工处理。",
+        "sensitive_question_handling": "转人工处理；不要基于通用抽取结果预测涨跌或承诺收益。",
     }
 
 
@@ -287,6 +301,11 @@ def generate_materials(
         "fallback_used": False,
         "fallback_reasons": [],
     }
+
+    if analysis.get("type") == "other":
+        meta["generation_source"] = "通用模板"
+        meta["reason"] = "该公告类型未配置专用生成模板，使用通用安全模板"
+        return fallback, meta
 
     if not use_llm:
         meta["reason"] = "未启用 AI 生成"
