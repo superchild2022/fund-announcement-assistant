@@ -529,6 +529,8 @@ def build_export_markdown(
     app_title: str,
     app_body: str,
     reviewed: bool,
+    rating: int | None,
+    feedback_text: str,
 ) -> str:
     case = result["case"]
     announcement = result["announcement"]
@@ -536,6 +538,7 @@ def build_export_markdown(
     materials = result["materials"]
     compliance = result["compliance"]
     meta = result["meta"]
+    rating_label = "未评价" if rating is None else f"{rating + 1} 星"
 
     lines: list[str] = []
     lines.append(f"# 基金公告运营物料：{case['title']}")
@@ -641,6 +644,13 @@ def build_export_markdown(
     lines.append(f"- 总耗时：{meta.get('timings', {}).get('total_s', '')} 秒")
     lines.append(f"- 抽取耗时：{meta.get('timings', {}).get('extraction_s', '')} 秒")
     lines.append(f"- 生成耗时：{meta.get('timings', {}).get('generation_s', '')} 秒")
+    lines.append("")
+    lines.append("## 人工复核与评价")
+    lines.append("")
+    lines.append(f"- 复核状态：{'已完成' if reviewed else '未完成'}")
+    lines.append(f"- 物料评分：{rating_label}")
+    if feedback_text.strip():
+        lines.append(f"- 补充反馈：{feedback_text.strip()}")
     lines.append("")
     lines.append("---")
     lines.append("")
@@ -888,10 +898,25 @@ def render_result(result: dict, case_id: str) -> None:
             st.json(conflicts)
 
     st.divider()
+    st.markdown("##### 人工复核与评价")
     reviewed = st.checkbox(
         "我已人工复核以上内容，确认对外发布前由运营/合规负责人签批",
         key=f"reviewed_{case_id}_{run_id}",
     )
+    st.markdown("**本次物料评价（1–5 星）**")
+    rating = st.feedback("stars", key=f"feedback_{case_id}_{run_id}")
+    feedback_text = st.text_area(
+        "补充反馈（可选）",
+        key=f"feedback_text_{case_id}_{run_id}",
+        height=90,
+        placeholder="例如：客服口径太长；App 推送缺少生效日期；分红计算需要更醒目……",
+    )
+    rating_label = "未评价" if rating is None else f"{rating + 1} 星"
+    if rating is None:
+        st.caption("评价会随导出文件保存，便于后续 Badcase 回流。")
+    else:
+        st.caption(f"本次物料评价：{rating_label}　·　评价会随导出文件保存，便于后续 Badcase 回流。")
+
     export_md = build_export_markdown(
         result,
         cs_short_val,
@@ -899,6 +924,8 @@ def render_result(result: dict, case_id: str) -> None:
         app_title_val,
         app_body_val,
         reviewed,
+        rating,
+        feedback_text,
     )
     export_json = {
         **result,
@@ -909,6 +936,11 @@ def render_result(result: dict, case_id: str) -> None:
             "app_push": {"title": app_title_val, "body": app_body_val},
         },
         "human_reviewed": reviewed,
+        "human_feedback": {
+            "rating": rating,
+            "rating_label": rating_label,
+            "comment": feedback_text,
+        },
     }
     c1, c2 = st.columns(2)
     with c1:
