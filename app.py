@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 import json
+import re
 import sys
 from datetime import date, datetime, time
 from pathlib import Path
@@ -21,6 +22,7 @@ TYPE_LABELS = {
     "manager_change": "基金经理变更",
     "purchase_limit": "大额申购限制",
     "dividend": "基金分红",
+    "other": "其他公告",
     "unknown": "未识别",
 }
 
@@ -29,9 +31,15 @@ TYPE_OPTIONS = {
     "基金经理变更": "manager_change",
     "大额申购限制": "purchase_limit",
     "基金分红": "dividend",
+    "其他公告（通用抽取）": "other",
 }
 
 SAMPLE_CASE_MAP = {"A": "case1", "B": "case2", "C": "case3"}
+
+DEFAULT_OPERATOR_REQUEST = (
+    "请帮我整理这份公告，准备一份可以提供给客服和 App 运营人员使用的材料；"
+    "如涉及用户可能追问的问题，请一并给出合规的客服口径。"
+)
 
 
 def inject_css() -> None:
@@ -40,8 +48,6 @@ def inject_css() -> None:
 <style>
 :root { --ink:#152033; --muted:#64748b; --line:#e2e8f0; --brand:#0f766e; }
 .block-container { max-width: 1280px; padding-top: 3.8rem; padding-bottom: 3rem; }
-[data-testid="stToolbar"] { display: none; }
-[data-testid="stDecoration"] { display: none; }
 h1,h2,h3 { letter-spacing:-0.02em; }
 .app-title { font-size: 2.0rem; font-weight: 800; color: var(--ink); margin-bottom: .1rem; }
 .app-subtitle { color: var(--muted); margin-bottom: .7rem; font-size: .98rem; }
@@ -62,6 +68,8 @@ h1,h2,h3 { letter-spacing:-0.02em; }
 .metric-label { color:var(--muted); font-size:.70rem; margin-bottom:.2rem; }
 .metric-value { color:var(--ink); font-size:1.0rem; font-weight:750; line-height:1.35; }
 .section-title { font-size:1.0rem; font-weight:750; color:var(--ink); margin:.35rem 0 .45rem 0; }
+.input-section-title { display:flex; align-items:center; gap:.5rem; font-size:1.08rem; font-weight:780; color:var(--ink); margin:0 0 .2rem 0; }
+.input-section-title .num { display:inline-flex; align-items:center; justify-content:center; width:1.5rem; height:1.5rem; border-radius:999px; background:#e6f4f1; color:#0f766e; font-size:.78rem; font-weight:800; }
 .fact-table { width:100%; border-collapse:collapse; font-size:.85rem; background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
 .fact-table td { padding:.5rem .6rem; border-bottom:1px solid #eef2f7; vertical-align:top; line-height:1.55; }
 .fact-table tr:last-child td { border-bottom:none; }
@@ -141,7 +149,6 @@ def render_header() -> None:
                 badge("AI 抽取", "blue"),
                 badge("规则计算", "green"),
                 badge("合规复核", "amber"),
-                badge("3 类公告", "gray"),
             ]
         ),
         unsafe_allow_html=True,
@@ -150,18 +157,14 @@ def render_header() -> None:
 
 def render_sidebar(profile: dict, cases: dict, announcements: dict) -> dict:
     st.sidebar.markdown("### 运行设置")
-    env_key = get_api_key()
-    if env_key:
+    api_key = get_api_key()
+    if api_key:
         st.sidebar.markdown(badge("API Key 已配置", "green"), unsafe_allow_html=True)
+        st.sidebar.caption("Key 从本地 `.env` 或 Streamlit Secrets 读取，页面不提供输入框。")
     else:
         st.sidebar.markdown(badge("未配置 API Key", "amber"), unsafe_allow_html=True)
+        st.sidebar.caption("未配置 Key 时请使用离线演示模式。")
 
-    key_input = st.sidebar.text_input(
-        "DeepSeek API Key（留空使用 .env）",
-        type="password",
-        placeholder="sk-...",
-        help="Demo 默认从本地 .env 读取，不会写入导出文件。",
-    )
     mode = st.sidebar.radio(
         "运行模式",
         ["AI 实时模式", "离线演示模式"],
@@ -170,7 +173,7 @@ def render_sidebar(profile: dict, cases: dict, announcements: dict) -> dict:
     )
     use_ai_compliance = st.sidebar.checkbox(
         "启用 AI 合规复核",
-        value=False,
+        value=True,
         help="规则引擎已做基础合规检查；开启后额外调用一次模型进行复核。",
     )
     st.sidebar.caption(
@@ -235,22 +238,105 @@ def render_sidebar(profile: dict, cases: dict, announcements: dict) -> dict:
         )
 
     return {
-        "api_key": key_input.strip() or env_key,
+        "api_key": api_key,
         "mode": mode,
         "use_ai_compliance": use_ai_compliance,
     }
 
 
-def render_inputs(announcements: dict, cases: dict, profile: dict) -> tuple[dict, dict, dict, str]:
-    st.markdown("### 1. 上传或粘贴公告")
-    st.caption(
-        "试题要求运营人员上传公告；上传/粘贴是主流程。三个规定案例只是快捷示例，"
-        "载入后公告原文会进入可编辑文本框，仍走同一套抽取、规则计算和生成流程。"
-    )
+def extract_request_params(
+    request: str,
+    type_hint: str,
+    sample_id: str | None,
+    cases: dict,
+) -> dict:
+    """从运营人员请求中提取规则计算所需的结构化参数。"""
+    if type_hint == "manager_change":
+        return {}
 
+    if type_hint == "purchase_limit":
+        params = {
+            "monthly_amount": 20000 if sample_id == "B" else 10000,
+            "single_day_debit": True,
+            "plan_date": "2026-05-20",
+            "daily_amount": 1000,
+        }
+        match = re.search(r"(?:每月|月)\s*([\d,]+)\s*元", request)
+        if match:
+            try:
+                params["monthly_amount"] = int(match.group(1).replace(",", ""))
+            except ValueError:
+                pass
+        if any(word in request for word in ("分散", "拆分", "分多日")):
+            params["single_day_debit"] = False
+            match = re.search(r"(?:每日|每天)\s*([\d,]+)\s*元", request)
+            if match:
+                try:
+                    params["daily_amount"] = int(match.group(1).replace(",", ""))
+                except ValueError:
+                    pass
+        elif any(word in request for word in ("单日", "一次性")):
+            params["single_day_debit"] = True
+        match = re.search(r"(\d{4})年(\d{1,2})月(\d{1,2})日", request)
+        if match:
+            params["plan_date"] = (
+                f"{int(match.group(1)):04d}-{int(match.group(2)):02d}-{int(match.group(3)):02d}"
+            )
+        else:
+            match = re.search(r"(\d{1,2})月(\d{1,2})日", request)
+            if match:
+                params["plan_date"] = f"2026-{int(match.group(1)):02d}-{int(match.group(2)):02d}"
+        return params
+
+    if type_hint == "dividend":
+        params = {
+            "shares": 25000 if sample_id == "C" else 10000,
+            "record_date": "2026-06-18",
+            "change_request_time": "2026-06-17T16:00:00",
+            "current_method": "现金分红",
+        }
+        match = re.search(r"([\d,]+)\s*份", request)
+        if match:
+            try:
+                params["shares"] = int(match.group(1).replace(",", ""))
+            except ValueError:
+                pass
+        date_str = "2026-06-17"
+        match = re.search(r"(\d{4})年(\d{1,2})月(\d{1,2})日", request)
+        if match:
+            date_str = (
+                f"{int(match.group(1)):04d}-{int(match.group(2)):02d}-{int(match.group(3)):02d}"
+            )
+        else:
+            match = re.search(r"(\d{1,2})月(\d{1,2})日", request)
+            if match:
+                date_str = f"2026-{int(match.group(1)):02d}-{int(match.group(2)):02d}"
+        match = re.search(r"(\d{1,2})[:：](\d{2})", request)
+        if match:
+            hour, minute = int(match.group(1)), int(match.group(2))
+            if 0 <= hour <= 23 and 0 <= minute <= 59:
+                params["change_request_time"] = f"{date_str}T{hour:02d}:{minute:02d}:00"
+        if re.search(r"当前.*红利再投资", request):
+            params["current_method"] = "红利再投资"
+        elif re.search(r"当前.*现金分红", request):
+            params["current_method"] = "现金分红"
+        return params
+
+    return {}
+
+
+def render_inputs(announcements: dict, cases: dict, profile: dict) -> tuple[dict, dict, str, str, str | None, str]:
     left, right = st.columns([1.15, 1])
 
     with left:
+        st.markdown(
+            '<div class="input-section-title"><span class="num">1</span>上传或粘贴公告</div>',
+            unsafe_allow_html=True,
+        )
+        st.caption(
+            "试题要求运营人员上传公告；上传/粘贴是主流程。三个规定案例只是快捷示例，"
+            "载入后公告原文会进入可编辑文本框，仍走同一套抽取、规则计算和生成流程。"
+        )
         uploaded = st.file_uploader(
             "上传公告 PDF / TXT",
             type=["pdf", "txt", "md"],
@@ -262,6 +348,7 @@ def render_inputs(announcements: dict, cases: dict, profile: dict) -> tuple[dict
             st.caption("上传文件优先；如果要使用示例文本，请先移除上传文件。")
 
         st.session_state.setdefault("announcement_text", "")
+        st.session_state.setdefault("operator_request", DEFAULT_OPERATOR_REQUEST)
         announcement_text = st.text_area(
             "公告原文",
             height=240,
@@ -270,12 +357,20 @@ def render_inputs(announcements: dict, cases: dict, profile: dict) -> tuple[dict
             placeholder="把公告全文粘贴到这里……",
         )
 
+        if uploaded and st.session_state.get("operator_request") in {
+            case["user_request"] for case in cases.values()
+        }:
+            st.session_state["operator_request"] = DEFAULT_OPERATOR_REQUEST
+            st.session_state["sample_id"] = None
+
         st.markdown("**没有文件？载入规定测试案例：**")
 
         def load_sample(sample_id: str) -> None:
             st.session_state["announcement_text"] = announcements[sample_id]["full_text"]
             st.session_state["sample_id"] = sample_id
             st.session_state["announcement_type_choice"] = "自动识别"
+            case_key = SAMPLE_CASE_MAP[sample_id]
+            st.session_state["operator_request"] = cases[case_key]["user_request"]
 
         sample_cols = st.columns(3)
         for col, sample_id in zip(sample_cols, ("A", "B", "C")):
@@ -300,7 +395,10 @@ def render_inputs(announcements: dict, cases: dict, profile: dict) -> tuple[dict
             )
             type_hint = TYPE_OPTIONS[type_choice] or detected
             if type_hint == "unknown":
-                st.warning("暂未识别公告类型，请手动选择；当前支持三类公告。")
+                st.warning(
+                    "暂未识别公告类型，请手动选择；可选择“其他公告（通用抽取）”，"
+                    "或为该类型补充专用规则后再处理。"
+                )
             else:
                 st.caption(f"识别类型：{TYPE_LABELS.get(type_hint, type_hint)}")
         else:
@@ -357,107 +455,26 @@ def render_inputs(announcements: dict, cases: dict, profile: dict) -> tuple[dict
             st.info("请上传 PDF/TXT、粘贴公告原文，或点击上方示例按钮载入公告 A/B/C。")
 
     with right:
-        st.markdown("### 2. 用户场景")
-        case_type = type_hint if text else "unknown"
+        st.markdown(
+            '<div class="input-section-title"><span class="num">2</span>运营人员请求</div>',
+            unsafe_allow_html=True,
+        )
+        st.caption("运营人员自己描述任务、目标读者和用户可能追问的问题；示例按钮只做预填，仍可修改。")
+        operator_request = st.text_area(
+            "运营人员请求",
+            height=150,
+            key="operator_request",
+            label_visibility="collapsed",
+            placeholder="例如：请帮我整理这份公告，准备客服和 App 运营人员可用的材料。用户可能会问：……",
+        )
+        st.caption("这段文本会作为任务描述传给 AI。")
 
-        if case_type == "unknown":
-            st.markdown(
-                '<div class="small-note">先上传/粘贴公告，或载入示例公告；系统会根据公告类型显示对应的用户场景输入。</div>',
-                unsafe_allow_html=True,
-            )
-            scenario_override: dict = {}
-            user_request = "用户上传/粘贴公告，请生成运营物料。"
-        else:
-            sample_case = cases.get(SAMPLE_CASE_MAP.get(sample_id, "")) if is_sample else None
-            user_request = (
-                sample_case.get("user_request")
-                if sample_case
-                else "用户上传/粘贴公告，请生成运营物料，并按下方场景判断影响。"
-            )
-            with st.expander("查看用户请求", expanded=False):
-                st.write(user_request)
+        st.markdown(
+            '<div class="small-note">系统会在点击“开始处理”后，从这段请求中识别时间、金额、份额等结构化参数，用于规则计算；识别结果可在“原始数据与日志”中查看。</div>',
+            unsafe_allow_html=True,
+        )
 
-            scenario_override = {}
-            if case_type == "manager_change":
-                questions = (
-                    (sample_case or {}).get("scenario", {}).get("user_questions")
-                    or ["基金经理为什么离任？", "基金后面会不会跌？"]
-                )
-                st.markdown("**用户可能追问：**")
-                for question in questions:
-                    st.markdown(f"- {question}")
-                st.markdown(
-                    '<div class="small-note">系统需要同时处理“原因推断”和“涨跌预测”两类敏感问题，不能只做摘要。</div>',
-                    unsafe_allow_html=True,
-                )
-            elif case_type == "purchase_limit":
-                default_monthly = 20000 if (is_sample and sample_id == "B") else 10000
-                monthly = st.number_input(
-                    "原定投计划金额（元/月）",
-                    min_value=0,
-                    value=default_monthly,
-                    step=1000,
-                    key="scenario_monthly",
-                )
-                single_day = st.checkbox(
-                    "单日一次性扣款",
-                    value=True,
-                    key="scenario_single_day",
-                    help="取消勾选表示分散到多日扣款",
-                )
-                plan_date = st.date_input(
-                    "计划扣款日",
-                    value=date(2026, 5, 20),
-                    key="scenario_plan_date",
-                )
-                daily = None
-                if not single_day:
-                    daily = st.number_input(
-                        "每日计划扣款金额（元）",
-                        min_value=0,
-                        value=1000,
-                        step=500,
-                        key="scenario_daily",
-                    )
-                scenario_override = {
-                    "monthly_amount": monthly,
-                    "single_day_debit": single_day,
-                    "plan_date": plan_date.isoformat(),
-                    "daily_amount": daily,
-                }
-                st.caption("试试取消“单日一次性扣款”，看看影响判断如何变化。")
-            elif case_type == "dividend":
-                default_shares = 25000 if (is_sample and sample_id == "C") else 10000
-                shares = st.number_input(
-                    "权益登记日持有份额",
-                    min_value=0,
-                    value=default_shares,
-                    step=1000,
-                    key="scenario_shares",
-                )
-                change_date = st.date_input(
-                    "分红方式变更申请日期",
-                    value=date(2026, 6, 17),
-                    key="scenario_change_date",
-                )
-                change_time = st.time_input(
-                    "申请时间",
-                    value=time(16, 0),
-                    key="scenario_change_time",
-                )
-                current_method = st.selectbox(
-                    "当前分红方式",
-                    ["现金分红", "红利再投资"],
-                    index=0,
-                    key="scenario_current_method",
-                )
-                scenario_override = {
-                    "shares": shares,
-                    "record_date": "2026-06-18",
-                    "change_request_time": datetime.combine(change_date, change_time).isoformat(),
-                    "current_method": current_method,
-                }
-                st.caption("把申请时间改到 15:00 前，系统会给出不同的分红方式判断。")
+    operator_request_value = operator_request.strip() or DEFAULT_OPERATOR_REQUEST
 
     if is_sample:
         case_key = SAMPLE_CASE_MAP.get(sample_id, "case1")
@@ -468,12 +485,13 @@ def render_inputs(announcements: dict, cases: dict, profile: dict) -> tuple[dict
             "id": "custom",
             "title": "自定义公告",
             "type": type_hint,
-            "user_request": user_request,
-            "scenario": scenario_override,
+            "user_request": operator_request_value,
+            "scenario": {},
             "expected": {},
         }
+    case["user_request"] = operator_request_value
 
-    return announcement, scenario_override, case, source_label
+    return announcement, case, source_label, operator_request_value, sample_id, type_hint
 
 
 def render_empty_state() -> None:
@@ -499,7 +517,7 @@ def render_empty_state() -> None:
             unsafe_allow_html=True,
         )
     st.markdown(
-        '<div class="small-note" style="margin-top:1rem;">上传/粘贴公告，或点击“载入公告 A/B/C”示例，然后点击“开始处理”。示例公告载入后仍可编辑，处理走同一套流程。</div>',
+        '<div class="small-note" style="margin-top:1rem;">上传/粘贴公告，填写运营人员请求，或点击“载入公告 A/B/C”示例，然后点击“开始处理”。系统会从请求中识别时间/金额/份额等结构化参数，可在“原始数据与日志”查看。</div>',
         unsafe_allow_html=True,
     )
 
@@ -532,6 +550,10 @@ def build_export_markdown(
     lines.append("## 一句话结论")
     lines.append("")
     lines.append(str(materials.get("headline", "")))
+    lines.append("")
+    lines.append("## 运营人员请求")
+    lines.append("")
+    lines.append(str(case.get("user_request", "")))
     lines.append("")
     lines.append("## 公告事实卡")
     lines.append("")
@@ -663,6 +685,9 @@ def render_result(result: dict, case_id: str) -> None:
         st.caption(f"生成保护：{reasons}")
     if meta.get("use_llm") and not meta.get("extraction", {}).get("llm_ok"):
         st.caption("抽取提示：AI 抽取未成功，已使用规则抽取结果。")
+
+    with st.expander("查看本次使用的运营人员请求", expanded=False):
+        st.write(result["case"].get("user_request", ""))
 
     tab1, tab2, tab3, tab4, tab5 = st.tabs(
         ["运营工作台", "客服物料", "App 与渠道", "合规检查", "原始数据与日志"]
@@ -847,6 +872,8 @@ def render_result(result: dict, case_id: str) -> None:
             )
 
     with tab5:
+        st.markdown("##### 结构化参数（从运营人员请求中识别）")
+        st.json(result.get("scenario", {}))
         st.markdown("##### 结构化抽取结果")
         st.json(result["extracted"])
         st.markdown("##### 规则分析结果")
@@ -917,7 +944,9 @@ def main() -> None:
     mode = settings["mode"]
     use_ai_compliance = settings["use_ai_compliance"]
 
-    announcement, scenario_override, case, source_label = render_inputs(announcements, cases, profile)
+    announcement, case, source_label, operator_request_value, sample_id, type_hint = render_inputs(
+        announcements, cases, profile
+    )
 
     st.markdown("")
     can_process = bool(announcement.get("full_text")) and announcement.get("type") != "unknown"
@@ -930,7 +959,8 @@ def main() -> None:
     if can_process:
         st.caption(
             f"当前输入：{source_label} · {announcement.get('type_label')} · "
-            "AI 负责理解与表达，规则引擎负责金额/日期判断，输出需人工复核。"
+            "AI 负责理解与表达，规则引擎负责金额/日期判断。"
+            "修改公告或运营人员请求后，请重新点击“开始处理”才会更新结果。"
         )
     else:
         st.caption("请先上传/粘贴公告，或载入示例公告 A/B/C，并确认公告类型。")
@@ -941,7 +971,7 @@ def main() -> None:
             "announcement": announcement.get("id"),
             "type": announcement.get("type"),
             "text_head": announcement.get("full_text", "")[:200],
-            "scenario": scenario_override,
+            "request": operator_request_value,
             "mode": mode,
             "ai_compliance": use_ai_compliance,
         },
@@ -950,38 +980,47 @@ def main() -> None:
         default=str,
     )
 
-    if process:
+    def run_current() -> None:
         use_llm = mode == "AI 实时模式" and bool(api_key)
         if mode == "AI 实时模式" and not api_key:
             st.warning("未配置 API Key，本次自动使用离线演示模式。")
         if announcement.get("type") == "unknown":
             st.error("公告类型未识别，请先在上方手动选择公告类型。")
-        else:
-            with st.spinner("正在解析公告、计算影响并生成物料..."):
-                try:
-                    result = run_pipeline(
-                        case,
-                        announcement,
-                        profile,
-                        scenario_override=scenario_override,
-                        api_key=api_key,
-                        use_llm=use_llm,
-                        use_ai_compliance=use_ai_compliance and use_llm,
-                    )
-                    run_id = st.session_state.get("run_count", 0) + 1
-                    st.session_state["run_count"] = run_id
-                    result["run_id"] = run_id
-                    st.session_state["result"] = result
-                    st.session_state["result_signature"] = signature
-                    st.rerun()
-                except Exception as exc:  # noqa: BLE001
-                    st.error(f"处理失败：{exc}")
-                    st.exception(exc)
+            return
+
+        params = extract_request_params(operator_request_value, type_hint, sample_id, cases)
+        case["scenario"] = params
+
+        with st.spinner("正在解析公告、计算影响并生成物料..."):
+            try:
+                result = run_pipeline(
+                    case,
+                    announcement,
+                    profile,
+                    scenario_override=params,
+                    api_key=api_key,
+                    use_llm=use_llm,
+                    use_ai_compliance=use_ai_compliance and use_llm,
+                )
+                run_id = st.session_state.get("run_count", 0) + 1
+                st.session_state["run_count"] = run_id
+                result["run_id"] = run_id
+                st.session_state["result"] = result
+                st.session_state["result_signature"] = signature
+                st.rerun()
+            except Exception as exc:  # noqa: BLE001
+                st.error(f"处理失败：{exc}")
+                st.exception(exc)
+
+    if process:
+        run_current()
 
     result = st.session_state.get("result")
     if result:
         if st.session_state.get("result_signature") != signature:
-            st.warning("输入已变更。下方展示的是上一次结果，请重新点击“开始处理”以更新。")
+            st.warning("输入已变更。下方展示的是上一次结果，结果不会自动刷新。")
+            if st.button("用当前输入重新生成", key="reprocess_stale"):
+                run_current()
         render_result(result, case["id"])
     else:
         render_empty_state()
