@@ -61,7 +61,7 @@
     <div class="nav-subtitle">设计思路文档</div>
     <div class="nav-label">目录</div>
     <nav>
-      <a class="nav-main" href="#0">0. 一页纸摘要</a><a class="nav-main" href="#1">1. 问题定义</a><a class="nav-sub" href="#11">1.1 用户与场景</a><a class="nav-sub" href="#12">1.2 现状与痛点</a><a class="nav-sub" href="#13">1.3 成功指标</a><a class="nav-sub" href="#14">1.4 目标与非目标</a><a class="nav-main" href="#2">2. 产品方案</a><a class="nav-sub" href="#21">2.1 产品定位</a><a class="nav-sub" href="#22">2.2 核心流程</a><a class="nav-sub" href="#23">2.3 输入与输出</a><a class="nav-sub" href="#231">2.3.1 上传模块与三个规定案例的关系</a><a class="nav-sub" href="#24">2.4 人工复核与审计</a><a class="nav-sub" href="#25">2.5 页面结构</a><a class="nav-main" href="#3-ai">3. AI 设计</a><a class="nav-sub" href="#31-ai">3.1 AI / 规则 / 人的分工</a><a class="nav-sub" href="#32">3.2 结构化抽取</a><a class="nav-sub" href="#33">3.3 规则引擎</a><a class="nav-sub" href="#34">3.4 文案生成</a><a class="nav-sub" href="#35">3.5 合规护栏</a><a class="nav-sub" href="#36-rag-agent">3.6 为什么不用复杂 RAG / Agent</a><a class="nav-sub" href="#37">3.7 模型选择与思考模式</a><a class="nav-sub" href="#38-prompt">3.8 Prompt 示例（节选）</a><a class="nav-main" href="#4">4. 三类公告的差异化处理</a><a class="nav-main" href="#5">5. 三个规定案例的实际运行结果</a><a class="nav-sub" href="#51-1">5.1 案例1：基金经理变更</a><a class="nav-sub" href="#52-2">5.2 案例2：大额申购限制</a><a class="nav-sub" href="#53-3">5.3 案例3：基金分红</a><a class="nav-main" href="#6">6. 评估与验证</a><a class="nav-sub" href="#61">6.1 三个规定案例自检</a><a class="nav-sub" href="#62">6.2 边界测试</a><a class="nav-sub" href="#63">6.3 合规检查</a><a class="nav-sub" href="#64">6.4 效率与成本</a><a class="nav-sub" href="#65">6.5 尚未验证的部分</a><a class="nav-main" href="#7-finclaw-skill">7. 与 FinClaw 参考 Skill 的关系</a><a class="nav-sub" href="#71">7.1 借鉴的部分</a><a class="nav-sub" href="#72">7.2 刻意不同的部分</a><a class="nav-main" href="#8">8. 局限与迭代路线</a><a class="nav-sub" href="#81">8.1 当前局限</a><a class="nav-sub" href="#82">8.2 迭代路线</a><a class="nav-main" href="#9">9. 运行与复现</a><a class="nav-sub" href="#91">9.1 环境</a><a class="nav-sub" href="#92">9.2 配置</a><a class="nav-sub" href="#93">9.3 启动</a><a class="nav-sub" href="#94">9.4 公网体验</a><a class="nav-sub" href="#95">9.5 测试</a><a class="nav-sub" href="#96">9.6 截图</a><a class="nav-main" href="#10">10. 如实说明</a><a class="nav-main" href="#_2">附录：目录结构</a>
+      <a class="nav-main" href="#0">0. 一句话定位</a><a class="nav-main" href="#1">1. 问题分析</a><a class="nav-sub" href="#11">1.1 业务背景</a><a class="nav-sub" href="#12">1.2 现状与痛点</a><a class="nav-sub" href="#13">1.3 机会判断</a><a class="nav-sub" href="#14">1.4 成功指标</a><a class="nav-main" href="#2">2. 产品方案</a><a class="nav-sub" href="#21">2.1 产品定位</a><a class="nav-sub" href="#22">2.2 核心流程</a><a class="nav-sub" href="#23">2.3 功能模块</a><a class="nav-sub" href="#24">2.4 输入与输出</a><a class="nav-sub" href="#25-ai">2.5 人机协同设计（人工与 AI 的边界）</a><a class="nav-sub" href="#26">2.6 复核与审计机制</a><a class="nav-main" href="#3-ai">3. AI 应用方式</a><a class="nav-sub" href="#31-ai">3.1 AI 分工与边界</a><a class="nav-sub" href="#32">3.2 模型选择与思考模式</a><a class="nav-sub" href="#33">3.3 场景问答：置信度分流（规划中）</a><a class="nav-main" href="#4">4. 合规话术设计与护栏</a><a class="nav-sub" href="#41">4.1 红线规则</a><a class="nav-sub" href="#42">4.2 生成后校验与双层护栏</a><a class="nav-main" href="#5">5. 三个规定测试案例与实测结果</a><a class="nav-sub" href="#51-1">5.1 案例1：基金经理变更</a><a class="nav-sub" href="#52-2">5.2 案例2：大额申购限制</a><a class="nav-sub" href="#53-3">5.3 案例3：基金分红</a><a class="nav-main" href="#6">6. 效果评估与数据闭环</a><a class="nav-sub" href="#61">6.1 指标</a><a class="nav-sub" href="#62">6.2 当前实测</a><a class="nav-sub" href="#63-badcase">6.3 Badcase 回流（规划）</a><a class="nav-main" href="#7-finclaw-skill">7. 与 FinClaw 参考 Skill 的关系</a><a class="nav-sub" href="#71">7.1 借鉴的部分</a><a class="nav-sub" href="#72">7.2 刻意不同的部分</a><a class="nav-main" href="#8">8. 技术实现</a><a class="nav-sub" href="#81">8.1 架构</a><a class="nav-sub" href="#82">8.2 数据与规则</a><a class="nav-sub" href="#83">8.3 部署</a><a class="nav-sub" href="#84">8.4 安全与密钥</a><a class="nav-main" href="#9">9. 局限与迭代路线</a><a class="nav-sub" href="#91">9.1 当前局限</a><a class="nav-sub" href="#92">9.2 迭代路线</a><a class="nav-main" href="#10">10. 运行与复现</a><a class="nav-sub" href="#101">10.1 本地运行</a><a class="nav-sub" href="#102">10.2 公网体验</a><a class="nav-sub" href="#103">10.3 测试</a><a class="nav-sub" href="#104">10.4 截图</a><a class="nav-main" href="#11_1">11. 如实说明</a><a class="nav-main" href="#_2">附录：目录结构</a>
       <a class="back-top" href="#top">回到顶部 ↑</a>
     </nav>
   </aside>
@@ -70,185 +70,252 @@
       <div class="top-note">AI 笔试提交材料 · 设计思路文档 · 配套 Demo 与截图见文末</div>
       <h1 id="_1">基金公告运营助手：设计思路文档</h1>
 <blockquote>
-<p>本文档配套一个可运行的 Streamlit Demo。题目材料中的产品、人物、数据均为虚构，仅用于演示。</p>
+<p>岗位：AI 产品经理（2027 届金融科技专场）｜日期：2026 年 10 月 17 日｜全部产品、人物与数据均为考试虚构材料</p>
 </blockquote>
-<h2 id="0">0. 一页纸摘要</h2>
-<p><strong>产品定位</strong>：把一份基金公告，在 3 分钟内变成可审核、可追溯、可分发的运营物料。</p>
-<p><strong>解决的问题</strong>：公募基金公告数量多、类型差异大，运营/客服需要逐份阅读、判断影响、准备多版本文案。人工处理慢、口径不统一、容易说错，尤其在公告集中发布时更明显。</p>
-<p><strong>方案</strong>：上传公告 → 自动识别类型 → 结构化抽取（带原文引用）→ 规则引擎计算影响 → 生成客服/App/渠道多角色物料 → 合规扫描 → 人工复核 → 导出留痕。</p>
-<p><strong>AI 的角色</strong>：大模型负责“读懂和表达”——分类、字段抽取、文案生成、敏感问题识别；规则引擎负责“算和判”——金额、日期、份额、时间截止；人负责“签字和发送”。</p>
-<p><strong>实际结果</strong>：三个规定案例全部跑通；离线规则自检 14/14 通过；边界测试 11/11 通过；三个案例合规检查 0 项违规；AI 实时模式单份公告约 6–8 秒（DeepSeek V4.1 Flash，默认关闭思考模式）。</p>
-<p><strong>Demo 形态</strong>：Streamlit 工作台，内置三个预置案例，支持自定义 PDF/TXT 上传、AI/离线双模式、人工复核与 Markdown/JSON 导出。稳定体验链接：https://fund-announcement-assistant.streamlit.app/</p>
-<h2 id="1">1. 问题定义</h2>
-<h3 id="11">1.1 用户与场景</h3>
+<h2 id="0">0. 一句话定位</h2>
+<p><strong>基金公告运营助手：上传一份公告，自动完成结构化理解、影响判断、多角色材料生成与合规复核；运营人员只需审核和发布。</strong></p>
+<p>当前 Demo 聚焦“单份公告”的完整核心流程；批量解析、场景问答置信度分流等能力列入路线图。</p>
+<h2 id="1">1. 问题分析</h2>
+<h3 id="11">1.1 业务背景</h3>
+<p>公募基金公司会持续发布基金经理变更、申购限制、基金分红等不同类型公告。公告发布后，运营人员需要：阅读公告 → 理解内容 → 根据用户可能关心的问题准备运营与客服材料。不同公告涉及的业务、用户和后续处理方式差异很大，且公告往往集中发布。</p>
+<h3 id="12">1.2 现状与痛点</h3>
 <table>
 <thead>
 <tr>
-<th>用户</th>
-<th>关心什么</th>
-<th>系统输出</th>
+<th>层面</th>
+<th>具体表现</th>
+<th>业务影响</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>运营人员</td>
-<td>公告改了什么、要更新哪些页面/系统</td>
-<td>事实卡、运营待办、时间轴</td>
+<td>效率</td>
+<td>公告扎堆（月末/季末）时逐份人工阅读整理，每份 30–60 分钟</td>
+<td>处理积压，响应滞后</td>
 </tr>
 <tr>
-<td>客服</td>
-<td>用户会问什么、怎么答不违规</td>
-<td>短口径、完整回复、FAQ、敏感问题处理</td>
-</tr>
-<tr>
-<td>渠道运营</td>
-<td>哪些渠道要通知、什么时间生效</td>
-<td>渠道待办、限额/时间口径</td>
+<td>质量</td>
+<td>靠人读易漏关键字段：生效日期、限额口径、权益登记日等，抄错即事故</td>
+<td>口径不统一，跨团队不一致</td>
 </tr>
 <tr>
 <td>合规</td>
-<td>有没有预测涨跌、承诺收益、推断未披露原因</td>
-<td>合规风险等级、违规项、改写建议</td>
+<td>公告通常只披露事实，不披露深层原因；模型很容易“补全”原因或做涨跌判断</td>
+<td>监管处罚/投诉/声誉风险</td>
 </tr>
 <tr>
-<td>管理者</td>
-<td>处理效率、质量、是否可追溯</td>
-<td>处理日志、引用、版本记录</td>
+<td>责任</td>
+<td>缺少留痕和复盘：难以追溯“这句话来自哪条公告”“数字怎么算的”</td>
+<td>风险敞口，责任归属不清</td>
 </tr>
 </tbody>
 </table>
-<h3 id="12">1.2 现状与痛点</h3>
+<h3 id="13">1.3 机会判断</h3>
 <ol>
-<li><strong>公告类型多，关键变量不同</strong>：基金经理变更看“人”，限购看“钱 + 时间 + 口径”，分红看“份额 + 日期 + 分红方式”。</li>
-<li><strong>人工阅读和整理慢</strong>：一份公告从阅读到产出客服/App 物料，通常需要 20–30 分钟。</li>
-<li><strong>客服口径不一致</strong>：同一公告，不同人可能说出“业绩不好”“一定会跌”“马上恢复”等不合规表述。</li>
-<li><strong>合规风险高</strong>：公告通常只披露事实，不披露深层原因；模型很容易“补全”原因或做涨跌判断。</li>
-<li><strong>缺少留痕和复盘</strong>：人工整理难以追溯“这句话来自哪条公告”“数字怎么算的”。</li>
+<li><strong>公告结构化程度高</strong>：基金公告按监管要求以固定模板披露（基金基本信息、生效日期、关键业务参数等），适合 AI 抽取与生成。</li>
+<li><strong>用户问题可枚举</strong>：每类公告的高频用户问题高度相似（FAQ 模式成熟），AI 生成 + 人工复核可规模化。</li>
+<li><strong>合规可规则化</strong>：监管红线可沉淀为话术规则库，由系统自动校验——这是金融场景独有的“AI 可落地”机会。</li>
 </ol>
-<h3 id="13">1.3 成功指标</h3>
+<h3 id="14">1.4 成功指标</h3>
 <table>
 <thead>
 <tr>
 <th>指标</th>
 <th>目标</th>
-<th>本 Demo 现状</th>
+<th>当前 Demo</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>单份公告处理时间</td>
-<td>30 分钟 → 3 分钟</td>
+<td>30–60 分钟 → 3 分钟</td>
 <td>AI 模式约 6–8 秒生成草稿</td>
 </tr>
 <tr>
 <td>关键字段准确率</td>
 <td>≥ 95%</td>
-<td>三个规定案例关键字段全部正确</td>
+<td>三个规定案例关键字段全部正确（自检 14/14）</td>
 </tr>
 <tr>
-<td>合规红线违规</td>
-<td>0</td>
-<td>三个案例规则检查 0 违规</td>
+<td>红线拦截率</td>
+<td>100%</td>
+<td>三个案例 0 项违规；高风险自动回退</td>
 </tr>
 <tr>
-<td>人工修改率</td>
-<td>&lt; 20%</td>
-<td>尚未做真实用户测试</td>
+<td>FAQ 一次采纳率</td>
+<td>≥ 80%</td>
+<td>尚未做真实用户测试（设计目标）</td>
 </tr>
 <tr>
-<td>可追溯性</td>
-<td>关键字段可回原文</td>
-<td>每个字段保留 source_quotes</td>
+<td>Badcase 回流率</td>
+<td>持续监控</td>
+<td>未实现（路线图）</td>
 </tr>
 </tbody>
 </table>
-<h3 id="14">1.4 目标与非目标</h3>
-<p><strong>目标</strong>
-- 覆盖三类高频公告：基金经理变更、大额申购限制、基金分红。
-- 打通“公告 → 影响判断 → 多角色物料 → 合规复核 → 导出”的完整演示流程。
-- 让评审能现场改输入、看规则变化，而不是只看三个写死的答案。</p>
-<p><strong>非目标</strong>
-- 不做投资建议、不做交易、不做收益预测。
-- 不做完整基金运营平台/CMS。
-- 不接入真实注册登记机构、销售机构或公告源系统。
-- 不追求覆盖全部监管公告类型（清盘、持有人大会、合同修订、费率调整等）。</p>
 <h2 id="2">2. 产品方案</h2>
 <h3 id="21">2.1 产品定位</h3>
-<blockquote>
-<p>不是“公告摘要工具”，而是“公告运营工作台”。</p>
-</blockquote>
-<p>摘要只回答“公告说了什么”；运营真正需要的是：
-- 这条公告对<strong>当前用户/场景</strong>意味着什么；
-- 客服应该怎么说，哪些话不能说；
-- App/渠道要改什么；
-- 哪些信息公告没说，不能编；
-- 谁复核、什么时候发布、如何留痕。</p>
+<p><strong>不是“公告摘要工具”，而是“公告运营工作台”。</strong></p>
+<p>面向基金公司运营/客服人员的公告智能处理工具，把一份公告自动处理为一套可直接使用的运营材料（客服 FAQ、App 文案、内部执行清单）——<strong>上传 → AI 解析 → 一键产出</strong>。</p>
 <h3 id="22">2.2 核心流程</h3>
-<pre><code class="language-text">公告 PDF / 文本
-      │
-      ▼
-① 类型识别（基金经理变更 / 限购 / 分红）
-      │
-      ▼
-② 结构化抽取（JSON Schema + 原文引用 + 缺失字段）
-      │
-      ▼
-③ 规则校验与计算（金额、日期、份额、15:00 截止、边界值）
-      │
-      ▼
-④ 多角色物料生成（客服 / App / 渠道 / 合规）
-      │
-      ▼
-⑤ 合规扫描（禁语、关键事实、数字一致性、风险提示）
-      │
-      ▼
-⑥ 人工复核 + 导出 + 留痕
-</code></pre>
-<h3 id="23">2.3 输入与输出</h3>
-<p><strong>输入</strong>
-- 公告原文：上传 PDF / TXT / Markdown，或直接粘贴文本；三个规定案例可通过“载入公告 A/B/C”快捷填入。
-- 产品基本资料：基金名称、代码、A/C 份额、风险等级、默认分红方式等。
-- 用户场景：定投金额、持有份额、申请时间等。</p>
-<p><strong>输出</strong>
-1. 公告事实卡（字段 + 原文引用）
-2. 影响判断（规则计算 + 影响等级 + 影响范围）
-3. 客服短口径 / 客服完整回复
-4. App 推送标题与正文
-5. 用户 FAQ
-6. 运营待办清单
-7. 合规风险等级、违规项与改写建议
-8. 缺失信息 / 待确认事项
-9. 后续跟踪清单
-10. 处理日志（抽取方式、模型用量、耗时）</p>
-<h3 id="231">2.3.1 上传模块与三个规定案例的关系</h3>
-<p>试题原文是“运营人员上传公告 A/B/C”，因此本 Demo 把<strong>上传/粘贴作为主流程</strong>，而不是只做三个预置按钮。</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>做什么</th>
+<th>由谁完成</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STEP 1 公告输入</td>
+<td>上传 PDF / 粘贴文本 / 载入示例公告 A/B/C；运营人员填写自由文本请求</td>
+<td>人</td>
+</tr>
+<tr>
+<td>STEP 2 类型识别 + 结构化抽取</td>
+<td>公告类型识别（经理变更/限购/分红/其他）→ 按 JSON Schema 抽取关键字段，附原文引用，校验缺失字段</td>
+<td>AI</td>
+</tr>
+<tr>
+<td>STEP 3 规则校验与计算</td>
+<td>金额/日期/份额/15:00 交易截止/边界值等规则判定与计算（如分红金额、限额判定）</td>
+<td>AI + 规则引擎</td>
+</tr>
+<tr>
+<td>STEP 4 运营要点提炼</td>
+<td>事件速递 → 生效时间 → 影响范围 → 对用户/运营/合规的关键提示</td>
+<td>AI</td>
+</tr>
+<tr>
+<td>STEP 5 多角色材料生成</td>
+<td>客服 FAQ + App 文案 + 内部执行清单（按角色产出，口径统一）</td>
+<td>AI</td>
+</tr>
+<tr>
+<td>STEP 6 合规扫描</td>
+<td>禁语红线/关键事实一致性/数字核对/风险提示自动扫描</td>
+<td>合规引擎 + AI 复核</td>
+</tr>
+<tr>
+<td>STEP 7 人工复核 + 导出 + 留痕</td>
+<td>人工审核确认 → 导出交付 → 操作留痕（可审计）</td>
+<td>人</td>
+</tr>
+<tr>
+<td>STEP 8 场景问答（规划中）</td>
+<td>用户画像匹配 → 置信度判定：高置信 AI 直接答/低置信转人工/红线拦截</td>
+<td>AI 建议 + 人确认</td>
+</tr>
+</tbody>
+</table>
+<p>STEP 8 的完整置信度分流未在本 Demo 实现；当前由“用户 FAQ + 敏感问题处理”覆盖简化版。</p>
+<p>流程遵循“输入 → AI 能力 → 输出”的表达规范，每一步明确标注由 AI 完成、由人完成、还是人机协作。</p>
+<h3 id="23">2.3 功能模块</h3>
+<p><strong>第一层 · 公告理解引擎（解决“读公告太慢”）</strong></p>
 <ul>
-<li>页面第一入口是“上传公告 PDF/TXT”和“粘贴公告原文”。</li>
-<li>三个规定案例做成“载入公告 A/B/C”快捷按钮：点击后公告原文会填入<strong>可编辑文本框</strong>，再走同一套“类型识别 → 抽取 → 规则计算 → 生成 → 合规检查”管线。</li>
-<li>示例按钮只负责填入公告原文，不产生预置答案；结果均为运行期生成。</li>
-<li>如果修改了示例文本，系统按自定义公告处理。</li>
-<li>这样既能满足试题“上传公告”的交互要求，也方便评审快速复现三个规定案例。</li>
+<li>结构化抽取：谁、什么事、何时生效、金额/额度是多少</li>
+<li>公告分类：基金经理变更/限购/分红/其他公告；其他类型可走通用抽取</li>
+<li>关键条款高亮与原文引用，不需要运营自己翻</li>
+<li>批量上传 → 批量总结（规划中，当前 Demo 为单份处理）</li>
 </ul>
-<h3 id="24">2.4 人工复核与审计</h3>
+<p><strong>第二层 · 影响分析（解决“读了公告不知道怎么办”）</strong></p>
 <ul>
-<li>所有输出明确标注为“运营草稿”，必须人工复核。</li>
-<li>页面提供“我已人工复核”勾选，导出文件中记录复核状态。</li>
-<li>合规风险为“高”时，系统自动回退到安全模板，并在页面和日志中说明。</li>
-<li>导出 Markdown/JSON，保留事实卡、规则过程、合规检查、模型用量，便于复盘。</li>
+<li>这份公告会影响哪类用户</li>
+<li>用户可能会问什么问题（FAQ 预判）</li>
+<li>触发后续动作：更新 FAQ、发推送、通知渠道方</li>
+<li>基金经理变更：影响等级、管理稳定性、影响范围、后续跟踪</li>
+<li>限购：单日单账户限额、合并计算口径、恢复时间未公告</li>
+<li>分红：分红金额、权益登记日、15:00 截止、默认分红方式</li>
 </ul>
-<h3 id="25">2.5 页面结构</h3>
+<p><strong>第三层 · 材料生成（输出层）</strong></p>
 <ul>
-<li>左侧：运行设置、产品资料、三案例自检、如实说明。</li>
-<li>主区：上传/粘贴公告、载入示例公告、公告类型确认、用户场景、开始处理。</li>
-<li>结果区五个 Tab：
-  1. 运营工作台（事实卡 + 规则判断 + 影响范围 + 缺失信息 + 敏感问题）
-  2. 客服物料（短口径 + 完整回复）
-  3. App 与渠道（推送 + FAQ + 运营待办 + 合规提示）
-  4. 合规检查（风险等级 + 违规项 + 通过项 + AI 复核）
-  5. 原始数据与日志（抽取 JSON、规则 JSON、模型用量、合规报告）</li>
+<li>客服应答口径（短口径/完整回复）</li>
+<li>App 推送文案</li>
+<li>内部同步通知</li>
+<li>FAQ 更新条目</li>
+<li>运营待办清单</li>
 </ul>
-<h2 id="3-ai">3. AI 设计</h2>
-<h3 id="31-ai">3.1 AI / 规则 / 人的分工</h3>
+<p><strong>横切能力（贯穿三层）</strong></p>
+<ul>
+<li>人机协同审核流：AI 产出全部为“待审核”，按风险分级流转（低/中/高），全链路留痕</li>
+<li>场景问答：输入用户场景，意图识别 → 风险与置信度判定 → 分流生成合规回复（规划中；当前以 FAQ + 敏感问题处理覆盖）</li>
+</ul>
+<h3 id="24">2.4 输入与输出</h3>
+<p><strong>输入</strong></p>
+<ul>
+<li>公告原文：上传 PDF / TXT / Markdown，或直接粘贴文本；三个规定案例可快捷载入</li>
+<li>运营人员请求：自由文本，作为任务描述传给 AI；示例按钮只做预填，仍可编辑</li>
+<li>产品基本资料：基金名称、代码、A/C 份额、风险等级、默认分红方式等</li>
+<li>结构化参数：系统在点击“开始处理”后从请求中识别时间、金额、份额等，用于规则计算；不要求运营人员单独填写，识别结果可在“原始数据与日志”查看</li>
+</ul>
+<p><strong>输出（10 项）</strong></p>
+<ol>
+<li>公告事实卡（字段 + 原文引用）</li>
+<li>影响判断（规则计算 + 影响等级 + 影响范围）</li>
+<li>客服短口径/完整回复</li>
+<li>App 推送标题与正文</li>
+<li>用户 FAQ</li>
+<li>运营待办清单</li>
+<li>合规风险等级、违规项与改写建议</li>
+<li>缺失信息/待确认事项</li>
+<li>后续跟踪清单</li>
+<li>处理日志（抽取方式、模型用量、耗时、结构化参数）</li>
+</ol>
+<h3 id="25-ai">2.5 人机协同设计（人工与 AI 的边界）</h3>
+<p>这是本产品区别于“普通 AI 工具”的核心机制：<strong>分级自动化 + 人在回路 + 全留痕</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>输出物</th>
+<th>风险等级</th>
+<th>AI 的权限</th>
+<th>人的介入</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>公告速递、内部执行清单</td>
+<td>低</td>
+<td>自动生成</td>
+<td>轻量浏览确认</td>
+</tr>
+<tr>
+<td>客服 FAQ、App 文案</td>
+<td>中</td>
+<td>生成 + 合规自检打标</td>
+<td>必须人工审核后才可发布</td>
+</tr>
+<tr>
+<td>收益承诺/离任归因/恢复时间等</td>
+<td>高</td>
+<td>只给建议口径</td>
+<td>强制人工决策，AI 不直接答复</td>
+</tr>
+</tbody>
+</table>
+<p><strong>三条铁律</strong>：</p>
+<ol>
+<li>AI 只“备料”不“发布”——对外发布动作永远由人完成；</li>
+<li>置信度打标——AI 对自己的输出标“高置信/需人工复核”；</li>
+<li>全链路留痕——AI 生成什么、人改哪里、谁审核，全部可追溯（金融合规审计标配）。</li>
+</ol>
+<h3 id="26">2.6 复核与审计机制</h3>
+<ul>
+<li>所有输出标注“运营草稿”，必须人工复核</li>
+<li>页面提供“我已人工复核”勾选，导出文件记录复核状态</li>
+<li>合规风险为“高”时自动回退安全模板，并在页面与日志说明</li>
+<li>导出 Markdown/JSON，保留事实卡、规则过程、合规检查、模型用量，便于复盘</li>
+</ul>
+<h2 id="3-ai">3. AI 应用方式</h2>
+<h3 id="31-ai">3.1 AI 分工与边界</h3>
+<p><strong>边界总览</strong>：</p>
+<ul>
+<li><strong>AI 放开做</strong>：公告分类/字段抽取/运营速览/内部清单</li>
+<li><strong>半自动</strong>：对外客服话术与 App 文案须人工审核</li>
+<li><strong>禁区</strong>：离任归因/涨跌预测/收益承诺/恢复时间承诺，AI 只给建议口径，强制人工决策</li>
+</ul>
+<p><strong>核心原则</strong>：<strong>LLM 负责理解和表达，规则负责计算和判断，人负责签字和发送。</strong></p>
 <table>
 <thead>
 <tr>
@@ -261,22 +328,22 @@
 <tr>
 <td>公告分类</td>
 <td>关键词 + LLM</td>
-<td>三类公告关键词明显，LLM 兜底</td>
+<td>公告关键词明显，LLM 兜底</td>
 </tr>
 <tr>
 <td>字段抽取</td>
 <td>LLM + JSON Schema</td>
-<td>公告是非结构化文本，需要语义理解</td>
+<td>公告为非结构化文本，需要语义理解</td>
 </tr>
 <tr>
 <td>金额/日期/份额计算</td>
 <td>规则引擎</td>
-<td>大模型算术和日期边界不可靠，必须可审计</td>
+<td>大模型算术与日期边界不可靠，必须可审计</td>
 </tr>
 <tr>
 <td>文案生成</td>
 <td>LLM</td>
-<td>需要针对客服/App/渠道生成不同语气和长度</td>
+<td>需针对客服/App/渠道生成不同语气与长度</td>
 </tr>
 <tr>
 <td>敏感问题识别</td>
@@ -285,8 +352,8 @@
 </tr>
 <tr>
 <td>合规检查</td>
-<td>规则 + 可选 LLM 复核</td>
-<td>规则保证红线，LLM 补充语义判断</td>
+<td>规则 + AI 复核</td>
+<td>规则保证红线，AI 补充语义判断</td>
 </tr>
 <tr>
 <td>最终发布</td>
@@ -295,158 +362,76 @@
 </tr>
 </tbody>
 </table>
-<p><strong>核心原则</strong>：LLM 负责理解和表达，规则负责计算和判断，人负责签字和发送。</p>
-<h3 id="32">3.2 结构化抽取</h3>
-<ul>
-<li>每类公告定义独立 JSON Schema，例如基金经理变更：</li>
-<li>基金名称、代码、公告日期、变更类型、离任经理、继续管理经理、离任原因、生效日期、协会手续、转任说明。</li>
-<li>抽取结果包含：</li>
-<li><code>source_quotes</code>：关键字段对应的原文句子；</li>
-<li><code>missing_fields</code>：公告未披露的字段；</li>
-<li><code>conflicts</code>：AI 抽取与规则抽取不一致时，记录冲突并采用规则值。</li>
-<li>对于短公告（几页以内），采用<strong>全文入上下文</strong>，不引入 RAG：</li>
-<li>减少分块导致的上下文丢失；</li>
-<li>引用更完整；</li>
-<li>Demo 阶段更稳定。</li>
-<li>对于长公告/批量场景，后续再引入分块检索。</li>
-</ul>
-<h3 id="33">3.3 规则引擎</h3>
-<p>规则引擎负责所有“算”和“判”：</p>
-<ul>
-<li><strong>基金经理变更</strong>：离任/继续管理关系、生效日、是否无人管理、公告是否提及终止/清盘/策略调整。</li>
-<li><strong>大额申购限制</strong>：</li>
-<li>单日、单账户、累计；</li>
-<li>申购 + 定投 + 转换转入合并计算；</li>
-<li>“不含 10,000 元” → 10,000 元本身不受限，10,000.01 元触发；</li>
-<li>恢复时间“另行公告” → 不编造日期。</li>
-<li><strong>分红</strong>：</li>
-<li>分红金额 = 持有份额 ÷ 10 × 每 10 份分红金额；</li>
-<li>默认分红方式；</li>
-<li>权益登记日、除息日、现金发放日；</li>
-<li>15:00 交易时间截止；</li>
-<li>红利再投资份额 = 分红金额 ÷ 除息后净值；</li>
-<li>分红不是额外收益，除息后净值下降。</li>
-</ul>
-<p>金额使用 <code>Decimal</code> 计算并四舍五入到分，避免浮点误差。</p>
-<h3 id="34">3.4 文案生成</h3>
-<ul>
-<li>生成 Prompt 中同时放入：</li>
-<li>公告事实；</li>
-<li>规则引擎结论；</li>
-<li>产品资料；</li>
-<li>用户场景；</li>
-<li>输出 JSON Schema。</li>
-<li>明确要求：</li>
-<li>不得改变数字、日期、人名；</li>
-<li>区分公告事实、规则计算、运营建议；</li>
-<li>不得预测涨跌、承诺收益；</li>
-<li>不得推断公告未披露的原因；</li>
-<li>缺失信息写“公告未说明”；</li>
-<li>客服回复先共情、再事实、再下一步。</li>
-<li>生成后会做一次规则校验：</li>
-<li>关键数字是否出现；</li>
-<li>是否出现禁语；</li>
-<li>是否包含风险提示；</li>
-<li>是否缺少关键事实（如“张晨继续管理”）。</li>
-<li>校验不通过时，自动回退到安全模板，并在页面说明。</li>
-</ul>
-<h3 id="35">3.5 合规护栏</h3>
-<p>规则层检查：
-- 禁语/保证性表述：保证收益、稳赚、必涨、无风险、业绩不好、一定会跌、赶紧赎回等；
-- 关键事实：基金经理变更必须说明张晨继续管理；限购必须说明 10,000 元限额和恢复时间未公告；分红必须说明 750 元、现金分红、6 月 22 日、以登记机构为准；
-- 关键数字：分红不能出现 7,500 元；限购不能漏掉 10,000 元；
-- 风险提示：客服回复必须包含“基金有风险，投资需谨慎”或“不构成投资建议”；
-- 数字一致性：生成文案中的关键数字与规则结果比对。</p>
-<p>AI 复核（可选）：
-- 额外调用一次模型，检查语义层面的预测、承诺、原因推断、投资建议；
-- 与规则检查结果合并，取更高风险等级。</p>
-<h3 id="36-rag-agent">3.6 为什么不用复杂 RAG / Agent</h3>
-<ul>
-<li>本题公告只有几页，全文入上下文更稳，引用更完整。</li>
-<li>运营场景需要<strong>可控、可解释、可审计</strong>，完全自主 Agent 反而增加不确定性。</li>
-<li>采用确定性 Workflow：每一步有明确输入输出，失败可回退，人工可介入。</li>
-<li>规则引擎承担关键计算，避免“模型看起来很对、数字算错”的风险。</li>
-</ul>
-<h3 id="37">3.7 模型选择与思考模式</h3>
+<h3 id="32">3.2 模型选择与思考模式</h3>
 <ul>
 <li>模型：<strong>DeepSeek V4.1 Flash</strong>（API model 名：<code>deepseek-flash</code>）。</li>
 <li>该模型支持思考模式。开启时单份公告会增加约 20–50 秒推理延迟，并消耗更多 completion tokens。</li>
 <li>本 Demo 对“结构化抽取 + 运营文案”默认关闭思考模式（<code>DEEPSEEK_THINKING=disabled</code>），实测单份公告约 6–8 秒；复杂公告或深度分析可通过 <code>.env</code> 改为 <code>enabled</code>。</li>
 <li>关闭的是显式思考链，不是换模型；金额、日期、份额等关键计算仍由规则引擎保证。</li>
 </ul>
-<h3 id="38-prompt">3.8 Prompt 示例（节选）</h3>
-<p><strong>抽取 System Prompt</strong></p>
-<pre><code class="language-text">你是基金公告信息抽取器。你只依据公告原文抽取信息，不得补充、推测或改写。
-1. 只输出一个 JSON 对象。
-2. 日期统一为 YYYY-MM-DD；金额为数字（元）。
-3. 公告没有写的字段填 null，并在 missing_fields 中列出。
-4. 每个关键字段尽量在 source_quotes 中给出原文句子。
-5. 不确定的字段不要猜。
+<h3 id="33">3.3 场景问答：置信度分流（规划中）</h3>
+<p>借鉴 AI 客服的最佳实践（意图识别 → 置信度判断 → 高低分流 → Badcase 回流），结合金融场景的“风险等级”维度，规划如下分流：</p>
+<pre><code class="language-text">用户问题
+   │
+   ▼
+意图识别（离任原因/涨跌/恢复时间/分红方式/费用/其他）
+   │
+   ▼
+风险判定（高/中/低）
+   │
+   ├── 高风险：命中“归因/预测/承诺”红线 → 固定合规口径 + 转人工
+   ├── 中风险：高置信 → AI 草稿 + 人工确认；低置信 → 转人工
+   └── 低风险：高置信 → AI 直接答；低置信 → 转人工
 </code></pre>
-<p><strong>生成 System Prompt</strong></p>
-<pre><code class="language-text">你是基金公司的公告运营助手，服务对象是客服、App 运营、渠道运营和合规人员。
-1. 只使用给定事实和规则计算结果，不得改变数字、日期、人名。
-2. 严格区分公告事实、规则计算、运营建议。
-3. 不得预测基金涨跌，不得承诺收益，不得使用“一定”“必涨”“稳赚”“不会跌”等表述。
-4. 不得推断公告未披露的原因，例如不得说“因为业绩不好”。
-5. 公告没有说明的，写“公告未说明”，不要编造。
-6. 客服回复要先共情、再讲事实、再给下一步；明确说明不构成投资建议。
-</code></pre>
-<h2 id="4">4. 三类公告的差异化处理</h2>
+<p>本 Demo 尚未实现完整的置信度分流；当前以“敏感问题处理 + FAQ + 合规检查”覆盖核心场景，完整分流列入路线图。</p>
+<h2 id="4">4. 合规话术设计与护栏</h2>
+<h3 id="41">4.1 红线规则</h3>
 <table>
 <thead>
 <tr>
-<th>维度</th>
-<th>基金经理变更</th>
-<th>大额申购限制</th>
-<th>基金分红</th>
+<th>红线规则</th>
+<th>系统处理策略</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>核心变量</td>
-<td>人、生效日、继续管理安排</td>
-<td>金额、单日/单账户、业务范围、恢复时间</td>
-<td>份额、每 10 份分红、权益登记日、分红方式</td>
+<td>禁止对离任原因做业绩归因</td>
+<td>只采用公告口径“因工作安排离任”，不推测、不暗示与产品表现关联；公告未披露转任安排时，明确说“公告未说明”，不编造具体岗位/去向</td>
 </tr>
 <tr>
-<td>用户最关心</td>
-<td>为什么走、基金会不会跌</td>
-<td>我的定投会不会失败、何时恢复</td>
-<td>我能拿多少钱、现金还是份额</td>
+<td>禁止预测涨跌/承诺收益</td>
+<td>话术内置“基金有风险，投资需谨慎”“历史业绩不代表未来表现”等风险提示</td>
 </tr>
 <tr>
-<td>关键陷阱</td>
-<td>把“离任本基金”说成“离职”；推断业绩原因</td>
-<td>10,000 元本身是否受限；定投是否合并计算</td>
-<td>25,000×0.30=7,500 的错误；16:00 是否还来得及</td>
+<td>禁止承诺恢复时间</td>
+<td>统一口径“以公司后续公告为准”，建议关注官方公告；恢复提醒订阅为规划能力，不承诺具体日期</td>
 </tr>
 <tr>
-<td>规则判断</td>
-<td>是否无人管理、是否提及终止/清盘/策略调整</td>
-<td>单日累计是否超限；恢复日期是否公告</td>
-<td>分红金额；15:00 截止；默认现金分红</td>
+<td>分红方式变更有效性</td>
+<td>按“权益登记日前最后一次有效选择”判定，并结合工作日 15:00 交易截止：6 月 17 日 16:00 提交的变更顺延至 6 月 18 日（权益登记日当天）记录，不满足“权益登记日前”要求 → 大概率不生效，明确告知用户仍按现金分红</td>
 </tr>
 <tr>
-<td>合规红线</td>
-<td>不预测涨跌、不推断原因、不给买卖建议</td>
-<td>不承诺恢复日期、不引导多账户规避</td>
-<td>不断言一定收到份额、不把分红说成额外收益</td>
-</tr>
-<tr>
-<td>输出重点</td>
-<td>客服敏感问题口径 + App 变更通知</td>
-<td>影响判断 + 定投调整方案 + 恢复跟踪</td>
-<td>分红计算 + 到账时间 + 投资者教育</td>
+<td>不诱导用户转移</td>
+<td>解释限购原因时只使用公告口径“保护基金份额持有人利益”，不延伸推测规模/收益影响，不引导用户转投其他产品</td>
 </tr>
 </tbody>
 </table>
-<h2 id="5">5. 三个规定案例的实际运行结果</h2>
+<h3 id="42">4.2 生成后校验与双层护栏</h3>
+<p>文案生成后做规则校验：</p>
+<ul>
+<li>关键数字是否出现（750 元/10,000 元）</li>
+<li>是否含禁语/保证性表述</li>
+<li>是否含风险提示</li>
+<li>是否缺失关键事实（如“张晨继续管理”）</li>
+<li>数字是否与规则计算结果一致</li>
+</ul>
+<p>不通过自动回退安全模板并说明。<strong>规则层 + AI 复核层默认开启</strong>（可在侧边栏关闭），合并取更高风险等级；高风险文案不会直接对外。</p>
+<h2 id="5">5. 三个规定测试案例与实测结果</h2>
 <blockquote>
-<p>以下结果为 Demo 实际运行输出。AI 实时模式的措辞可能因模型生成略有差异；离线模式使用固定安全模板。截图见 <code>docs/screenshots/</code>。</p>
+<p>以下结果为 Demo 实际运行输出。AI 实时模式措辞可能因模型生成略有差异；离线模式使用固定安全模板。截图见 <code>docs/screenshots/</code>。</p>
 </blockquote>
 <h3 id="51-1">5.1 案例1：基金经理变更</h3>
-<p><strong>输入</strong>：公告 A；用户追问“基金经理离任是不是因为产品表现不好？基金后面是不是一定会跌？”</p>
+<p><strong>输入</strong>：公告 A；运营人员请求：“请帮我整理这份公告，准备一份可以提供给客服和 App 运营人员使用的材料。用户可能会问：基金经理离任是不是因为产品表现不好？基金后面是不是一定会跌？”</p>
 <p><strong>事实卡（实际输出）</strong></p>
 <table>
 <thead>
@@ -498,23 +483,25 @@
 </tr>
 </tbody>
 </table>
-<p><strong>关键判断</strong>
-- 李明因“工作安排”离任本基金基金经理，自 2026-04-15 生效；
-- 本基金仍由张晨管理，不是无人管理；
-- 公告未披露离任与业绩的关系，不能推断“因为业绩不好”；
-- 无法预测基金未来涨跌，不能回答“一定跌/不会跌”；
-- “离任本基金基金经理”不等于“从公司离职”。</p>
+<p><strong>关键判断</strong></p>
+<ul>
+<li>李明因“工作安排”离任本基金基金经理，自 2026-04-15 生效；</li>
+<li>本基金仍由张晨管理，不是无人管理；</li>
+<li>公告未披露离任与业绩的关系，不能推断“因为业绩不好”；</li>
+<li>无法预测基金未来涨跌，不能回答“一定跌/不会跌”；</li>
+<li>“离任本基金基金经理”不等于“从公司离职”。</li>
+</ul>
 <p><strong>客服短口径（实际输出）</strong></p>
 <blockquote>
 <p>您好，理解您对基金经理变更的关注。根据公告，李明因工作安排于2026年4月15日离任本基金基金经理，本基金仍由张晨继续管理，协会变更手续已办理。公告未披露离任与业绩相关，也无法预测未来涨跌。基金有风险，投资需谨慎，以上不构成投资建议。</p>
 </blockquote>
-<p><strong>合规检查</strong>：风险等级低；4 项通过，0 项违规；通过项包括“明确说明张晨继续管理”“明确说明公告未披露业绩原因”“未把离任误写为离职”。</p>
+<p><strong>合规检查</strong>：风险等级低；4 项通过，0 项违规。</p>
 <p><img alt="案例1工作台" src="screenshots/02_case1_workbench.png"></p>
 <p><img alt="案例1客服物料" src="screenshots/03_case1_cs.png"></p>
 <p><img alt="案例1 App与渠道" src="screenshots/03b_case1_app.png"></p>
 <p><img alt="案例1合规检查" src="screenshots/04_case1_compliance.png"></p>
 <h3 id="52-2">5.2 案例2：大额申购限制</h3>
-<p><strong>输入</strong>：公告 B；用户每月 20,000 元定投，询问影响及恢复时间。</p>
+<p><strong>输入</strong>：公告 B；运营人员请求：“一位用户原来设置了每月20,000元的定投计划。请判断本次公告可能对他产生什么影响，并准备一份用户回复。用户还想知道什么时候可以恢复原来的定投金额。”</p>
 <p><strong>事实卡（实际输出）</strong></p>
 <table>
 <thead>
@@ -554,12 +541,14 @@
 </tr>
 </tbody>
 </table>
-<p><strong>关键判断</strong>
-- 用户每月 20,000 元，如果是一次性单日扣款，单日单账户累计超过 10,000 元，管理人有权拒绝；
-- 如果计划分散到多日、每日累计不超过 10,000 元，则不受影响；
-- 10,000 元本身可以，10,000.01 元触发限制；
-- 赎回、转换转出不受影响；
-- 恢复时间公告称“另行公告”，不能承诺具体日期。</p>
+<p><strong>关键判断</strong></p>
+<ul>
+<li>用户每月 20,000 元，如果是一次性单日扣款，单日单账户累计超过 10,000 元，管理人有权拒绝；</li>
+<li>如果计划分散到多日、每日累计不超过 10,000 元，则不受影响；</li>
+<li>10,000 元本身可以，10,000.01 元触发限制；</li>
+<li>赎回、转换转出不受影响；</li>
+<li>恢复时间公告称“另行公告”，不能承诺具体日期。</li>
+</ul>
 <p><strong>客服短口径（实际输出）</strong></p>
 <blockquote>
 <p>理解您对定投计划的关心。根据公告，自2026年5月8日起，单日单账户累计申购、定投和转换转入超过10,000元的申请可能被拒绝，您的20,000元定投若单日扣款将超限。恢复时间公告未说明，需另行公告。建议您将单日金额调整至10,000元（含）以内，或咨询销售机构超限处理方式。基金有风险，投资需谨慎。</p>
@@ -568,10 +557,12 @@
 <p><img alt="案例2工作台" src="screenshots/05_case2_workbench.png"></p>
 <p><img alt="案例2客服物料" src="screenshots/05b_case2_cs.png"></p>
 <h3 id="53-3">5.3 案例3：基金分红</h3>
-<p><strong>输入</strong>：公告 C；用户权益登记日持有 25,000 份；6 月 17 日 16:00 申请改为红利再投资。</p>
-<p><strong>计算</strong>
-- 每 10 份分红 0.30 元 → 每份 0.03 元；
-- 25,000 ÷ 10 × 0.30 = <strong>750.00 元</strong>。</p>
+<p><strong>输入</strong>：公告 C；运营人员请求：“一位用户在权益登记日持有25,000份基金份额。他想知道本次分红金额，以及自己会收到现金还是基金份额。用户还表示，他在6月17日16:00申请将分红方式改为红利再投资。”</p>
+<p><strong>计算</strong></p>
+<ul>
+<li>每 10 份分红 0.30 元 → 每份 0.03 元；</li>
+<li>25,000 ÷ 10 × 0.30 = <strong>750.00 元</strong>。</li>
+</ul>
 <p><strong>事实卡（实际输出）</strong></p>
 <table>
 <thead>
@@ -602,8 +593,8 @@
 <td>750.00 元</td>
 </tr>
 <tr>
-<td>权益登记日 / 除息日</td>
-<td>2026年6月18日 / 2026年6月18日</td>
+<td>权益登记日/除息日</td>
+<td>2026年6月18日/2026年6月18日</td>
 </tr>
 <tr>
 <td>现金红利发放日</td>
@@ -627,12 +618,14 @@
 </tr>
 </tbody>
 </table>
-<p><strong>关键判断</strong>
-- 6 月 17 日 16:00 已超过工作日交易时间（通常 15:00），申请大概率于下一交易日（6 月 18 日权益登记日）处理，晚于“权益登记日前”的要求；
-- 因此本次大概率仍按现金分红 750 元处理；
-- 最终分红方式以注册登记机构记录为准，建议用户在 App 确认；
-- 如果按红利再投资：份额 = 750 元 ÷ 6 月 18 日除息后净值，6 月 19 日确认，6 月 22 日起可查询；
-- 分红不是额外收益，除息后基金份额净值会相应下降。</p>
+<p><strong>关键判断</strong></p>
+<ul>
+<li>6 月 17 日 16:00 已超过工作日交易时间（通常 15:00），申请大概率于下一交易日（6 月 18 日权益登记日）处理，晚于“权益登记日前”的要求；</li>
+<li>因此本次大概率仍按现金分红 750 元处理；</li>
+<li>最终分红方式以注册登记机构记录为准，建议用户在 App 确认；</li>
+<li>如果按红利再投资：份额 = 750 元 ÷ 6 月 18 日除息后净值，6 月 19 日确认，6 月 22 日起可查询；</li>
+<li>分红不是额外收益，除息后基金份额净值会相应下降。</li>
+</ul>
 <p><strong>客服短口径（实际输出）</strong></p>
 <blockquote>
 <p>理解您对本次分红到账方式的关注。根据公告，每10份分红0.30元，您持有的25,000份对应分红750.00元。您6月17日16:00提交的变更申请已超过通常15:00交易时间，本次大概率将按现金分红处理，最终以登记机构记录为准。现金红利发放日为6月22日，实际到账以销售机构为准。基金有风险，投资需谨慎，以上不构成投资建议。</p>
@@ -640,223 +633,197 @@
 <p><strong>合规检查</strong>：风险等级低；包含 750 元、现金分红、6 月 22 日、登记机构等关键事实；未出现 7,500 元错误。</p>
 <p><img alt="案例3工作台" src="screenshots/06_case3_workbench.png"></p>
 <p><img alt="案例3客服物料" src="screenshots/07_case3_cs.png"></p>
-<h2 id="6">6. 评估与验证</h2>
-<h3 id="61">6.1 三个规定案例自检</h3>
-<p>运行 <code>python tests/test_cases.py</code>（离线规则模式），结果：</p>
-<ul>
-<li>案例1：6/6 通过；</li>
-<li>案例2：4/4 通过；</li>
-<li>案例3：4/4 通过；</li>
-<li>合计：<strong>14/14 通过，0 失败</strong>。</li>
-</ul>
-<p>检查项包括：离任经理、继续管理经理、离任原因、生效日期、限制金额、限制起始日、用户受影响判断、恢复日期未编造、每 10 份分红、分红金额、本次分红方式、客服回复金额正确等。</p>
-<h3 id="62">6.2 边界测试</h3>
-<p>运行 <code>python tests/test_boundaries.py</code>，结果 <strong>11/11 通过</strong>：</p>
+<h2 id="6">6. 效果评估与数据闭环</h2>
+<h3 id="61">6.1 指标</h3>
 <table>
 <thead>
 <tr>
-<th>测试</th>
-<th>结果</th>
+<th>指标</th>
+<th>定义/口径</th>
+<th>目标值</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>20,000 元单日扣款</td>
-<td>受影响</td>
+<td>字段抽取准确率</td>
+<td>公告关键字段（代码/日期/金额/方案）抽取与人工标注一致率</td>
+<td>≥ 95%</td>
 </tr>
 <tr>
-<td>正好 10,000 元</td>
-<td>不受影响</td>
+<td>FAQ 一次采纳率</td>
+<td>运营人员未经修改直接采纳的 FAQ 占比</td>
+<td>≥ 80%</td>
 </tr>
 <tr>
-<td>10,000.01 元</td>
-<td>受影响</td>
+<td>红线拦截率</td>
+<td>高危话术（归因/预测/承诺）被规则库自动拦截的覆盖率</td>
+<td>100%（零遗漏）</td>
 </tr>
 <tr>
-<td>20,000 元分散到多日，每日 1,000 元</td>
-<td>不受影响</td>
-</tr>
-<tr>
-<td>分红变更申请 16:00</td>
-<td>本次现金分红</td>
-</tr>
-<tr>
-<td>25,000 份分红</td>
-<td>750 元</td>
-</tr>
-<tr>
-<td>当前已是红利再投资，16:00 变更失效</td>
-<td>仍为红利再投资</td>
-</tr>
-<tr>
-<td>分红变更申请 14:00</td>
-<td>可改红利再投资</td>
-</tr>
-<tr>
-<td>权益登记日当天申请</td>
-<td>本次现金分红</td>
-</tr>
-<tr>
-<td>基金经理变更后</td>
-<td>不是无人管理</td>
-</tr>
-<tr>
-<td>基金经理变更事件</td>
-<td>不是基金终止</td>
+<td>Badcase 回流率</td>
+<td>人工打回样本进入优化池并触发迭代的比例</td>
+<td>持续监控</td>
 </tr>
 </tbody>
 </table>
-<h3 id="63">6.3 合规检查</h3>
+<h3 id="62">6.2 当前实测</h3>
 <ul>
-<li>三个规定案例的规则合规检查均为“低风险”，0 项违规；</li>
-<li>检查覆盖：禁语/保证性表述、关键事实、关键数字、关键日期、风险提示；</li>
-<li>AI 实时生成如果触发禁语或缺失关键事实，系统会自动回退到安全模板，并在页面说明；</li>
-<li>可选开启 AI 合规复核，额外检查语义层面的预测、承诺、原因推断、投资建议。</li>
+<li>三个规定案例：全部跑通，离线自检 <strong>14/14</strong> 通过</li>
+<li>边界测试：<strong>11/11</strong> 通过（10,000/10,000.01、16:00/14:00、分散定投、当前已是红利再投资等）</li>
+<li>合规检查：三个案例 <strong>0 项违规</strong></li>
+<li>AI 实时模式：单份公告约 <strong>6–8 秒</strong>（DeepSeek V4.1 Flash，默认关闭思考模式）</li>
+<li>离线模式：规则抽取 + 安全模板，可复现，不调用大模型</li>
 </ul>
-<h3 id="64">6.4 效率与成本</h3>
-<table>
-<thead>
-<tr>
-<th>模式</th>
-<th>单份公告耗时</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>AI 实时模式</td>
-<td>约 6–8 秒</td>
-<td>DeepSeek V4.1 Flash 抽取 + 生成，默认关闭思考模式，实际运行观测</td>
-</tr>
-<tr>
-<td>离线演示模式</td>
-<td>&lt; 1 秒</td>
-<td>规则抽取 + 安全模板，可复现</td>
-</tr>
-<tr>
-<td>单案例 Token</td>
-<td>约 4k–7k</td>
-<td>抽取 + 生成，随公告长度变化</td>
-</tr>
-</tbody>
-</table>
-<h3 id="65">6.5 尚未验证的部分</h3>
-<ul>
-<li>未做真实运营/客服用户的可用性测试，人工修改率尚未量化；</li>
-<li>未做大规模公告集评测，只有 3 个规定案例 + 10 个边界用例；</li>
-<li>未接入真实公告源/登记机构/销售机构，无法验证渠道差异；</li>
-<li>未覆盖扫描件 OCR、复杂表格、跨页公告等真实脏数据；</li>
-<li>AI 生成措辞存在波动，必须保留人工复核。</li>
-</ul>
+<h3 id="63-badcase">6.3 Badcase 回流（规划）</h3>
+<p>把“审核”变成“标注”：运营人员每次采纳（点赞）或打回（点踩）都是训练信号，回流后用于更新话术库、规则库与抽取模板，实现模型/规则的持续迭代。本 Demo 尚未实现该闭环。</p>
+<p>金融场景用户/投资者对 AI 首次出错极易流失信任，因此高风险问题强制人工、低置信转人工，本质是把“AI 不完美”用产品设计兜住，而非让用户承担错误成本。</p>
 <h2 id="7-finclaw-skill">7. 与 FinClaw 参考 Skill 的关系</h2>
-<p>在设计过程中参考了 FinClaw 的基金公告解读、基金经理变更解读、分红解读、市场快讯生成、敏感措辞识别等 Skill。主要启发和取舍如下：</p>
+<p>设计过程中参考了 FinClaw 的基金公告解读、基金经理变更解读、分红解读、市场快讯生成、敏感措辞识别等 Skill。</p>
 <h3 id="71">7.1 借鉴的部分</h3>
 <ol>
-<li><strong>证据链优先</strong>：公告解读必须“结论对应证据”，不能只给标签。对应到本 Demo 的 <code>source_quotes</code> 和字段级原文引用。</li>
-<li><strong>区分事实、估算/判断、待核验事项</strong>：对应本 Demo 的“公告事实卡 / 规则计算 / 缺失信息”三块，以及“公告未说明”的兜底。</li>
+<li><strong>证据链优先</strong>：结论对应证据，不能只给标签。对应本 Demo 的 <code>source_quotes</code> 和字段级原文引用。</li>
+<li><strong>区分事实、判断、待核验事项</strong>：对应“公告事实卡/规则计算/缺失信息”三块，以及“公告未说明”的兜底。</li>
 <li><strong>基金经理变更的事件化分析</strong>：参考其“事件类型、影响等级、管理稳定性、风格延续性、团队支持、跟踪建议”框架，本 Demo 增加了“影响等级、影响范围、后续跟踪”。</li>
-<li><strong>对产品/客户/渠道的分角色影响</strong>：对应本 Demo 的“影响范围”和“多角色物料”。</li>
-<li><strong>敏感措辞识别的风险等级 + 改写建议</strong>：对应本 Demo 的合规检查：风险等级、违规项、修改建议、自动回退。</li>
-<li><strong>人工复核边界</strong>：参考其“需人工复核/不替代法务或正式公告口径”，本 Demo 强制人工复核勾选，并在导出文件中记录。</li>
-<li><strong>结构化输出习惯</strong>：参考其 <code>input_summary / key_findings / data_quality / limitations</code> 结构，本 Demo 在结果中保留抽取、规则、合规、日志和缺失信息。</li>
+<li><strong>对产品/客户/渠道的分角色影响</strong>：对应“影响范围”和“多角色物料”。</li>
+<li><strong>敏感措辞识别的风险等级 + 改写建议</strong>：对应合规检查的风险等级、违规项、修改建议、自动回退。</li>
+<li><strong>人工复核边界</strong>：参考其“需人工复核/不替代法务或正式公告口径”，本 Demo 强制人工复核勾选，并在导出文件记录。</li>
+<li><strong>结构化输出习惯</strong>：参考 <code>input_summary / key_findings / data_quality / limitations</code>，本 Demo 保留抽取、规则、合规、日志和缺失信息。</li>
 </ol>
 <h3 id="72">7.2 刻意不同的部分</h3>
 <ol>
-<li><strong>场景不同</strong>：FinClaw 的部分 Skill 偏投研分析，会输出“偏正面/中性/偏负面”等判断；本题是运营/客服场景，我们刻意不做买卖建议，不输出“是否值得持有”的结论，只做公告事实、规则影响和对外口径。</li>
+<li><strong>场景不同</strong>：部分 Skill 偏投研分析，会输出“偏正面/中性/偏负面”等判断；本题是运营/客服场景，我们刻意不做买卖建议，不输出“是否值得持有”的结论。</li>
 <li><strong>计算方式不同</strong>：参考 Skill 多为 Prompt/模板驱动；本 Demo 把金额、日期、份额、15:00 截止等做成显式规则引擎，保证可审计、可复现。</li>
 <li><strong>交付形态不同</strong>：本 Demo 是可交互的工作台，不是一份 Skill 说明；评审可以改输入、看规则变化、导出物料。</li>
-<li><strong>合规策略不同</strong>：本 Demo 在生成后做规则校验，高风险自动回退安全模板，而不是只依赖 Prompt 约束。</li>
-<li><strong>范围不同</strong>：参考 Skill 覆盖更多公告类型；本 Demo 只做三类高频公告，把每一类的边界条件做深。</li>
+<li><strong>合规策略不同</strong>：生成后做规则校验，高风险自动回退安全模板，而不是只依赖 Prompt 约束。</li>
+<li><strong>范围不同</strong>：参考 Skill 覆盖更多公告类型；本 Demo 完整规则覆盖三类高频公告，其他类型走通用抽取/人工复核，并保持可扩展。</li>
 </ol>
-<h2 id="8">8. 局限与迭代路线</h2>
-<h3 id="81">8.1 当前局限</h3>
+<h2 id="8">8. 技术实现</h2>
+<h3 id="81">8.1 架构</h3>
+<blockquote>
+<p>注意：本 Demo 不是上传 Word 中描述的“单页自包含 HTML + 纯规则模板”，而是 Streamlit + DeepSeek API 的实际实现。</p>
+</blockquote>
+<pre><code class="language-text">公告 PDF/TXT/粘贴文本 + 运营人员请求
+        │
+        ▼
+Streamlit 工作台（app.py）
+        │
+        ├── 类型识别（关键词 + 规则）
+        ├── AI 抽取（DeepSeek V4.1 Flash + JSON Schema）
+        ├── 规则引擎（金额/日期/份额/15:00/边界）
+        ├── 多角色材料生成（AI + 安全模板）
+        ├── 合规检查（规则 + AI 复核，默认开启）
+        ├── 人工复核 + Markdown/JSON 导出
+        └── 原始数据与日志（含从请求解析的结构化参数）
+</code></pre>
+<h3 id="82">8.2 数据与规则</h3>
+<ul>
+<li>产品基础资料：基金名称、代码、A/C 份额、风险等级、默认分红方式</li>
+<li>公告 A/B/C 全文与结构化字段：<code>data/announcements.json</code>、<code>data/cases.json</code></li>
+<li>规则引擎：<code>core/rules.py</code>，使用 Decimal 计算，避免浮点误差</li>
+<li>合规引擎：<code>core/compliance.py</code>，禁语/关键事实/数字一致性/风险提示</li>
+<li>抽取与生成：<code>core/extractor.py</code>、<code>core/generation.py</code>、<code>core/prompts.py</code></li>
+<li>端到端流程：<code>core/pipeline.py</code></li>
+</ul>
+<h3 id="83">8.3 部署</h3>
+<ul>
+<li>本地：<code>streamlit run app.py</code></li>
+<li>稳定公网：<strong>Streamlit Community Cloud</strong></li>
+<li>https://fund-announcement-assistant.streamlit.app/</li>
+<li>代码仓库：https://github.com/superchild2022/fund-announcement-assistant</li>
+<li>备用：本地 Streamlit + Cloudflare Quick Tunnel（<code>start_public.ps1</code>）</li>
+</ul>
+<h3 id="84">8.4 安全与密钥</h3>
+<ul>
+<li>API Key 不提供页面输入框；本地从 <code>.env</code> 读取，Streamlit Cloud 从 Secrets 读取</li>
+<li><code>.env</code> 已加入 <code>.gitignore</code>，不进入提交包/仓库</li>
+<li>导出的 Markdown/JSON 不包含 Key</li>
+<li>输出为运营草稿，必须人工复核，不构成投资建议</li>
+</ul>
+<h2 id="9">9. 局限与迭代路线</h2>
+<h3 id="91">9.1 当前局限</h3>
 <ol>
-<li><strong>公告类型有限</strong>：只支持基金经理变更、限购、分红；不支持清盘、持有人大会、合同修订、费率调整等。</li>
-<li><strong>规则覆盖有限</strong>：交易日判断只按工作日，未接入节假日日历；渠道截止时间差异未建模。</li>
+<li><strong>公告类型覆盖</strong>：完整规则覆盖基金经理变更、限购、分红三类高频公告；其他类型可走“其他公告（通用抽取）”并转人工复核，清盘、持有人大会、合同修订、费率调整等专用规则仍待扩展。架构按类型路由，新增类型只需补充抽取 Schema、规则和话术模板。</li>
+<li><strong>批量处理未实现</strong>：当前为单份公告流程；批量上传/汇总列入路线图。</li>
+<li><strong>场景问答置信度分流未实现</strong>：当前以 FAQ + 敏感问题处理覆盖；完整分流列入路线图。</li>
 <li><strong>数据源未接入</strong>：没有真实公告订阅、注册登记机构、销售机构接口；“恢复公告监控”未实现。</li>
 <li><strong>解析能力有限</strong>：PDF 表格、扫描件 OCR、跨页公告可能抽取不完整。</li>
 <li><strong>AI 波动</strong>：同一公告不同次生成措辞可能不同；已用规则校验和安全回退降低风险，但仍需人工复核。</li>
 <li><strong>未做真实用户评估</strong>：人工修改率、客服采纳率、一次解决率尚未量化。</li>
-<li><strong>公网链接</strong>：稳定链接已部署到 Streamlit Community Cloud；本地 Quick Tunnel 作为备用，依赖本机进程。</li>
+<li><strong>公网链接</strong>：稳定链接部署在 Streamlit Community Cloud；本地 Quick Tunnel 作为备用，依赖本机进程。</li>
 </ol>
-<h3 id="82">8.2 迭代路线</h3>
-<p><strong>P0（当前 Demo）</strong>
-- 三类公告端到端；
-- 事实卡 + 影响判断 + 多角色物料；
-- 规则引擎 + 合规检查 + 人工复核 + 导出。</p>
-<p><strong>P1（可用性增强）</strong>
-- 增加清盘、持有人大会、合同修订、费率调整等公告类型；
-- 批量上传、公告去重、优先级排序；
-- 接入公告源，自动监控“恢复大额申购”等后续公告；
-- 渠道模板配置化，支持不同销售机构口径。</p>
-<p><strong>P2（运营闭环）</strong>
-- 影响用户圈选：按持有份额、定投计划、分红方式筛选受影响客户；
-- 生成渠道通知任务和客服工单；
-- 接入 CRM/企微/App 内容系统；
-- 反馈闭环：人工修改记录回流，优化 Prompt 和模板。</p>
-<p><strong>P3（质量与规模化）</strong>
-- 公告评测集与自动评分（字段准确率、规则正确率、合规违规率）；
-- Prompt/规则版本管理与 A/B 测试；
-- 多语言、多市场扩展；
-- 合规规则库与监管条款映射。</p>
-<h2 id="9">9. 运行与复现</h2>
-<h3 id="91">9.1 环境</h3>
+<h3 id="92">9.2 迭代路线</h3>
+<p><strong>P0（当前 Demo）</strong></p>
 <ul>
-<li>Python 3.10+</li>
-<li>依赖：<code>streamlit</code>、<code>openai</code>、<code>python-dotenv</code>、<code>pymupdf</code>、<code>pandas</code></li>
+<li>三类高频公告端到端</li>
+<li>事实卡 + 影响判断 + 多角色物料</li>
+<li>规则引擎 + 合规检查 + 人工复核 + 导出</li>
+<li>其他公告通用抽取 + 人工复核</li>
 </ul>
+<p><strong>P1（可用性增强）</strong></p>
+<ul>
+<li>批量上传、公告去重、优先级排序</li>
+<li>增加清盘、持有人大会、合同修订、费率调整等公告类型</li>
+<li>接入公告源，自动监控“恢复大额申购”等后续公告</li>
+<li>渠道模板配置化，支持不同销售机构口径</li>
+</ul>
+<p><strong>P2（运营闭环）</strong></p>
+<ul>
+<li>影响用户圈选：按持有份额、定投计划、分红方式筛选受影响客户</li>
+<li>生成渠道通知任务和客服工单</li>
+<li>接入 CRM/企微/App 内容系统</li>
+<li>反馈闭环：人工修改记录回流，优化 Prompt 和模板</li>
+<li>场景问答置信度分流 + Badcase 回流</li>
+</ul>
+<p><strong>P3（质量与规模化）</strong></p>
+<ul>
+<li>公告评测集与自动评分（字段准确率、规则正确率、合规违规率）</li>
+<li>Prompt/规则版本管理与 A/B 测试</li>
+<li>多语言、多市场扩展</li>
+<li>合规规则库与监管条款映射</li>
+</ul>
+<h2 id="10">10. 运行与复现</h2>
+<h3 id="101">10.1 本地运行</h3>
 <pre><code class="language-powershell">pip install -r requirements.txt
+streamlit run app.py
 </code></pre>
-<h3 id="92">9.2 配置</h3>
-<p>复制 <code>.env.example</code> 为 <code>.env</code>，填入 DeepSeek API Key；不配置也可使用离线演示模式。</p>
-<pre><code class="language-text">DEEPSEEK_API_KEY=sk-...
-DEEPSEEK_BASE_URL=https://api.deepseek.com
-DEEPSEEK_MODEL=deepseek-flash
-DEEPSEEK_THINKING=disabled
-</code></pre>
-<h3 id="93">9.3 启动</h3>
-<pre><code class="language-powershell">streamlit run app.py
-</code></pre>
-<p>本地地址：<code>http://localhost:8501</code></p>
-<h3 id="94">9.4 公网体验</h3>
-<p><strong>稳定公网链接（Streamlit Community Cloud）：</strong></p>
-<p><strong>https://fund-announcement-assistant.streamlit.app/</strong></p>
-<p>代码仓库：</p>
-<p><strong>https://github.com/superchild2022/fund-announcement-assistant</strong></p>
-<p><img alt="Streamlit Cloud 稳定部署" src="screenshots/12_streamlit_cloud.png"></p>
-<p>本地/临时备用方案：</p>
+<p>浏览器打开 <code>http://localhost:8501</code>。</p>
+<h3 id="102">10.2 公网体验</h3>
+<p><strong>稳定链接（Streamlit Community Cloud）：</strong></p>
+<p>https://fund-announcement-assistant.streamlit.app/</p>
+<p><strong>代码仓库：</strong></p>
+<p>https://github.com/superchild2022/fund-announcement-assistant</p>
+<p>本地/临时备用：</p>
 <pre><code class="language-powershell">.\start_public.ps1
 </code></pre>
-<p>脚本会启动本地 Streamlit 和 Cloudflare Quick Tunnel，并打印 <code>https://*.trycloudflare.com</code> 链接。保持窗口打开，链接即可访问。</p>
-<p>当前临时备用链接（以实际运行输出为准）：</p>
-<p><strong>https://obtain-impacts-somerset-relay.trycloudflare.com</strong></p>
-<h3 id="95">9.5 测试</h3>
+<h3 id="103">10.3 测试</h3>
 <pre><code class="language-powershell">python tests/test_cases.py
 python tests/test_cases.py --llm
 python tests/test_boundaries.py
 </code></pre>
 <p>测试输出留档：<code>docs/test_results.txt</code>（三案例自检 + 边界测试）。</p>
-<h3 id="96">9.6 截图</h3>
+<h3 id="104">10.4 截图</h3>
 <ul>
+<li><code>docs/screenshots/01_home.png</code></li>
 <li><code>docs/screenshots/02_case1_workbench.png</code></li>
 <li><code>docs/screenshots/03_case1_cs.png</code></li>
 <li><code>docs/screenshots/03b_case1_app.png</code></li>
 <li><code>docs/screenshots/04_case1_compliance.png</code></li>
+<li><code>docs/screenshots/04b_case1_logs.png</code></li>
 <li><code>docs/screenshots/05_case2_workbench.png</code></li>
 <li><code>docs/screenshots/05b_case2_cs.png</code></li>
 <li><code>docs/screenshots/06_case3_workbench.png</code></li>
 <li><code>docs/screenshots/07_case3_cs.png</code></li>
-<li><code>docs/screenshots/12_streamlit_cloud.png</code></li>
 </ul>
-<h2 id="10">10. 如实说明</h2>
+<h2 id="11_1">11. 如实说明</h2>
 <ol>
 <li>本题三类公告为题目提供的虚构材料，Demo 未使用真实基金/客户数据。</li>
-<li>三类公告的规则引擎是显式代码；AI 用于抽取和文案生成，不是所有逻辑都由模型完成。</li>
-<li>三个案例的规则判断可离线复现；离线模式不调用大模型。</li>
+<li>Demo 的 AI 能力使用 <strong>DeepSeek V4.1 Flash API</strong> 做抽取、文案生成和合规复核；金额、日期、份额等关键计算由规则引擎完成。离线模式使用规则抽取 + 安全模板，不调用大模型。</li>
+<li>三个规定案例的规则判断可离线复现；截图和测试输出已留档。</li>
 <li>未接入真实注册登记机构、销售机构、公告源系统；“恢复时间”“除息后净值”等公告未披露信息只提示缺失，不编造。</li>
 <li>AI 实时生成存在措辞波动；系统会做规则校验，高风险时自动回退安全模板，但仍需人工复核。</li>
-<li>稳定链接部署在 Streamlit Community Cloud；本地 Quick Tunnel 作为备用，依赖本机进程，如失效可重新运行 <code>start_public.ps1</code>。</li>
-<li>三个规定案例的“载入公告 A/B/C”只是把公告原文填入可编辑文本框，不是预置答案；处理仍走同一套抽取、规则和生成管线。</li>
+<li>当前完整规则覆盖三类高频公告；其他类型可走“其他公告（通用抽取）”并转人工复核，新增专用类型可继续扩展。</li>
+<li>批量处理、场景问答置信度分流、Badcase 回流、恢复公告监控未实现，已列入路线图。</li>
+<li>稳定链接部署在 Streamlit Community Cloud；本地 Quick Tunnel 作为备用，依赖本机进程。</li>
 <li>输出为运营草稿，不构成投资建议，不替代合规/法务的正式审核。</li>
 </ol>
 <h2 id="_2">附录：目录结构</h2>
@@ -866,13 +833,13 @@ core/
   llm.py                        DeepSeek API 封装
   prompts.py                    抽取/生成/合规 Prompt
   extractor.py                  分类、AI抽取、规则抽取、冲突合并
-  rules.py                      三类公告规则引擎
+  rules.py                      三类公告规则引擎 + 通用抽取
   generation.py                 多角色物料生成与安全回退
   compliance.py                 合规检查
   pipeline.py                   端到端流程与自检
 data/
   fund_profile.json             产品基本资料
-  announcements.json            公告A/B/C原文
+  announcements.json            公告 A/B/C 原文
   cases.json                    三个测试案例与期望结果
 docs/
   design.md                     本文档（Markdown）
@@ -883,7 +850,7 @@ tests/
   test_cases.py                 三个规定案例自检
   test_boundaries.py            边界测试
   ui_flow.py                    浏览器端到端演示与截图
-start_public.ps1                一键公网体验
+start_public.ps1                一键本地临时公网体验
 requirements.txt
 </code></pre>
     </div>
