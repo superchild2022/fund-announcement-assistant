@@ -5,52 +5,145 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>基金公告运营助手：设计思路文档</title>
 <style>
-  :root { --ink:#152033; --muted:#64748b; --line:#e2e8f0; --brand:#0f766e; --sidebar:#0f172a; }
+  :root {
+    --ink:#152033; --muted:#64748b; --line:#e2e8f0; --brand:#0f766e;
+    --brand-2:#0d9488; --navy:#0f172a; --blue:#2563eb; --amber:#d97706;
+    --red:#dc2626; --green:#16a34a; --bg:#eef2f7; --card:#ffffff;
+  }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body { margin:0; background:#eef2f7; color:var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; line-height:1.75; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; line-height:1.75; }
   .layout { display:flex; min-height:100vh; }
-  .sidebar { width:272px; flex:0 0 272px; position:sticky; top:0; height:100vh; overflow-y:auto; background:var(--sidebar); color:#cbd5e1; padding:24px 15px 30px; }
+  .sidebar { width:272px; flex:0 0 272px; position:sticky; top:0; height:100vh; overflow-y:auto; background:linear-gradient(180deg,#0f172a 0%,#111827 60%,#0b1220 100%); color:#cbd5e1; padding:24px 15px 30px; }
   .sidebar::-webkit-scrollbar { width:6px; }
   .sidebar::-webkit-scrollbar-thumb { background:#334155; border-radius:999px; }
   .nav-home { display:block; color:#fff; text-decoration:none; font-weight:800; font-size:1rem; line-height:1.5; margin-bottom:4px; }
   .nav-subtitle { color:#94a3b8; font-size:.78rem; margin-bottom:18px; }
   .nav-label { color:#64748b; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; margin:0 0 8px 10px; }
-  .sidebar nav a { display:block; color:#cbd5e1; text-decoration:none; font-size:.84rem; line-height:1.45; padding:7px 10px; border-radius:8px; margin:2px 0; transition: background .15s, color .15s; }
-  .sidebar nav a:hover { background:#1e293b; color:#fff; }
-  .sidebar nav a.active { background:var(--brand); color:#fff; }
+  .sidebar nav a { display:block; color:#cbd5e1; text-decoration:none; font-size:.84rem; line-height:1.45; padding:7px 10px; border-radius:8px; margin:2px 0; transition: background .15s, color .15s, transform .15s; }
+  .sidebar nav a:hover { background:#1e293b; color:#fff; transform:translateX(2px); }
+  .sidebar nav a.active { background:linear-gradient(90deg,#0f766e,#0d9488); color:#fff; box-shadow:0 6px 16px rgba(15,118,110,.35); }
   .sidebar nav a.nav-sub { padding-left:22px; font-size:.79rem; color:#94a3b8; }
   .sidebar nav a.nav-sub:hover, .sidebar nav a.nav-sub.active { color:#fff; }
   .sidebar nav a.back-top { margin-top:18px; border-top:1px solid #1e293b; padding-top:12px; color:#94a3b8; }
   .content { flex:1; min-width:0; background:#fff; }
-  .content-inner { max-width:980px; margin:0 auto; padding:44px 40px 90px; }
-  h1 { font-size: 2.0rem; line-height:1.3; margin: 0 0 .4rem; letter-spacing:-.02em; }
-  h2 { font-size: 1.45rem; margin: 2.2rem 0 .8rem; padding-bottom:.35rem; border-bottom:2px solid #e6f4f1; }
-  h3 { font-size: 1.12rem; margin: 1.6rem 0 .5rem; }
+  .content-inner { max-width:1040px; margin:0 auto; padding:34px 38px 90px; }
+  .hero { position:relative; overflow:hidden; border-radius:22px; padding:34px 36px; color:#fff; background:radial-gradient(900px 380px at 85% -10%, rgba(45,212,191,.30), transparent 60%), linear-gradient(135deg,#0f172a 0%,#0f3d3a 55%,#115e59 100%); box-shadow:0 20px 50px rgba(15,23,42,.18); }
+  .hero::after { content:""; position:absolute; inset:0; background:linear-gradient(120deg,transparent 35%,rgba(255,255,255,.05) 50%,transparent 65%); pointer-events:none; }
+  .hero-inner { position:relative; z-index:1; display:grid; grid-template-columns:1.35fr .65fr; gap:26px; align-items:center; }
+  .hero-kicker { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; color:#99f6e4; margin-bottom:10px; }
+  .hero h1 { font-size:2.15rem; line-height:1.2; margin:0 0 10px; letter-spacing:-.03em; }
+  .hero-sub { font-size:1rem; color:#d1fae5; margin:0 0 16px; line-height:1.7; }
+  .hero-tags { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+  .hero-tags span { font-size:.75rem; padding:4px 10px; border-radius:999px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.16); color:#ecfdf5; }
+  .hero-actions { display:flex; flex-wrap:wrap; gap:10px; }
+  .hero-btn { display:inline-block; padding:9px 16px; border-radius:10px; font-size:.85rem; text-decoration:none; font-weight:700; transition:transform .15s, box-shadow .15s; }
+  .hero-btn:hover { transform:translateY(-1px); }
+  .hero-btn.primary { background:#fff; color:#0f766e; box-shadow:0 8px 20px rgba(0,0,0,.18); }
+  .hero-btn.ghost { color:#ecfdf5; border:1px solid rgba(255,255,255,.35); background:rgba(255,255,255,.06); }
+  .hero-pipeline { display:flex; flex-direction:column; gap:8px; align-items:stretch; }
+  .hp-item { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; font-weight:700; font-size:.88rem; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.14); }
+  .hp-item span { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:999px; font-size:.7rem; background:rgba(255,255,255,.16); }
+  .hp-item.blue { border-left:4px solid #60a5fa; }
+  .hp-item.green { border-left:4px solid #34d399; }
+  .hp-item.amber { border-left:4px solid #fbbf24; }
+  .hp-arrow { text-align:center; color:#99f6e4; font-weight:800; }
+  .kpi-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:18px 0 0; }
+  .kpi { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 15px; box-shadow:0 8px 22px rgba(15,23,42,.05); transition:transform .15s, box-shadow .15s; }
+  .kpi:hover { transform:translateY(-2px); box-shadow:0 12px 28px rgba(15,23,42,.09); }
+  .kpi-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .kpi-num { font-size:1.35rem; font-weight:850; color:var(--ink); letter-spacing:-.02em; }
+  .kpi-badge { font-size:.68rem; padding:2px 8px; border-radius:999px; font-weight:700; }
+  .kpi-badge.green { background:#dcfce7; color:#166534; }
+  .kpi-badge.blue { background:#dbeafe; color:#1e40af; }
+  .kpi-badge.amber { background:#fef3c7; color:#92400e; }
+  .kpi-label { color:var(--muted); font-size:.78rem; margin:4px 0 10px; }
+  .kpi-bar { height:6px; background:#eef2f7; border-radius:999px; overflow:hidden; }
+  .kpi-bar i { display:block; height:100%; border-radius:999px; background:linear-gradient(90deg,#0f766e,#2dd4bf); }
+  .kpi-bar i.ok { background:linear-gradient(90deg,#16a34a,#4ade80); }
+  .kpi-bar i.warm { background:linear-gradient(90deg,#d97706,#fbbf24); }
+  .time-strip { margin:12px 0 4px; padding:11px 14px; border-radius:12px; background:#f0fdfa; border:1px solid #ccfbf1; color:#115e59; font-size:.86rem; }
+  .time-strip span { margin:0 8px; color:#0d9488; font-weight:800; }
+  .viz { margin:26px 0 8px; }
+  .viz-head { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:12px; }
+  .viz-kicker { display:block; font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:#0f766e; font-weight:800; margin-bottom:2px; }
+  .viz-title { font-size:1.22rem; margin:0; letter-spacing:-.02em; color:var(--ink); }
+  .viz-note { color:var(--muted); font-size:.78rem; white-space:nowrap; }
+  .flow { display:flex; align-items:stretch; gap:6px; overflow-x:auto; padding-bottom:4px; }
+  .flow-step { flex:1 0 118px; background:var(--card); border:1px solid var(--line); border-top:4px solid #0f766e; border-radius:12px; padding:10px 11px; display:flex; flex-direction:column; gap:2px; min-width:118px; }
+  .flow-step:nth-of-type(4n+1) { border-top-color:#0f766e; }
+  .flow-step:nth-of-type(4n+3) { border-top-color:#2563eb; }
+  .flow-step:nth-of-type(4n+5) { border-top-color:#d97706; }
+  .flow-step:nth-of-type(4n+7) { border-top-color:#16a34a; }
+  .flow-num { font-size:.65rem; font-weight:850; color:#0f766e; letter-spacing:.08em; }
+  .flow-step strong { font-size:.82rem; line-height:1.35; color:var(--ink); }
+  .flow-step small { font-size:.7rem; color:var(--muted); line-height:1.35; }
+  .flow-arrow { display:flex; align-items:center; color:#0d9488; font-weight:900; font-size:.8rem; }
+  .boundary-grid { display:grid; grid-template-columns:1.05fr 1fr .95fr; gap:12px; }
+  .boundary-card { border-radius:14px; padding:15px 16px; border:1px solid var(--line); background:var(--card); position:relative; overflow:hidden; }
+  .boundary-card::before { content:""; position:absolute; left:0; top:0; bottom:0; width:5px; }
+  .boundary-card.green::before { background:#16a34a; }
+  .boundary-card.amber::before { background:#d97706; }
+  .boundary-card.red::before { background:#dc2626; }
+  .boundary-card.green { background:#f7fef9; }
+  .boundary-card.amber { background:#fffbeb; }
+  .boundary-card.red { background:#fef7f7; }
+  .boundary-tag { display:inline-block; font-size:.68rem; font-weight:800; padding:2px 8px; border-radius:999px; margin-bottom:8px; }
+  .boundary-card.green .boundary-tag { background:#dcfce7; color:#166534; }
+  .boundary-card.amber .boundary-tag { background:#fef3c7; color:#92400e; }
+  .boundary-card.red .boundary-tag { background:#fee2e2; color:#991b1b; }
+  .boundary-card h3 { margin:0 0 6px; font-size:1rem; }
+  .boundary-card p { margin:0; color:#475569; font-size:.84rem; line-height:1.65; }
+  .boundary-card strong { color:#92400e; }
+  .case-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+  .case-card { display:block; text-decoration:none; color:inherit; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:15px 16px; box-shadow:0 8px 22px rgba(15,23,42,.04); transition:transform .18s, box-shadow .18s, border-color .18s; }
+  .case-card:hover { transform:translateY(-3px); box-shadow:0 14px 30px rgba(15,23,42,.10); border-color:#99f6e4; }
+  .case-tag { display:inline-block; font-size:.68rem; font-weight:800; padding:2px 8px; border-radius:999px; margin-bottom:8px; }
+  .case-tag.blue { background:#dbeafe; color:#1e40af; }
+  .case-tag.amber { background:#fef3c7; color:#92400e; }
+  .case-tag.green { background:#dcfce7; color:#166534; }
+  .case-card h3 { margin:0 0 6px; font-size:1.02rem; }
+  .case-card p { margin:0 0 10px; color:#475569; font-size:.82rem; line-height:1.6; }
+  .case-link { color:#0f766e; font-size:.8rem; font-weight:800; }
+  h1 { font-size:2rem; line-height:1.3; margin:0 0 .4rem; letter-spacing:-.02em; }
+  h2 { font-size:1.42rem; margin:2.1rem 0 .8rem; padding:.15rem 0 .15rem .75rem; border-left:5px solid var(--brand); border-bottom:none; background:linear-gradient(90deg,#f0fdfa,rgba(240,253,250,0) 70%); border-radius:0 8px 8px 0; }
+  h3 { font-size:1.08rem; margin:1.5rem 0 .45rem; color:#0f3d3a; }
   h1, h2, h3 { scroll-margin-top: 20px; }
-  p { margin: .6rem 0; }
-  a { color: var(--brand); }
-  blockquote { margin: 1rem 0; padding: .8rem 1rem; background:#f0fdfa; border-left:4px solid var(--brand); color:#134e4a; border-radius:0 8px 8px 0; }
-  table { width:100%; border-collapse: collapse; margin: 1rem 0 1.4rem; font-size: .92rem; }
-  th, td { border:1px solid var(--line); padding:.55rem .65rem; text-align:left; vertical-align:top; }
-  th { background:#f8fafc; font-weight:700; }
-  tr:nth-child(even) td { background:#fcfdff; }
+  p { margin:.6rem 0; }
+  a { color:var(--brand); }
+  blockquote { margin:1rem 0; padding:.85rem 1rem; background:linear-gradient(90deg,#f0fdfa,#ffffff); border-left:4px solid var(--brand); color:#134e4a; border-radius:0 10px 10px 0; }
+  table { width:100%; border-collapse:separate; border-spacing:0; margin:1rem 0 1.4rem; font-size:.9rem; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff; }
+  th, td { padding:.6rem .7rem; text-align:left; vertical-align:top; border-bottom:1px solid #eef2f7; }
+  th { background:linear-gradient(135deg,#0f766e,#115e59); color:#fff; font-weight:700; font-size:.82rem; letter-spacing:.01em; }
+  tr:last-child td { border-bottom:none; }
+  tbody tr:nth-child(even) td { background:#fbfdff; }
+  tbody tr:hover td { background:#f0fdfa; }
+  td:first-child { font-weight:600; color:#334155; }
   code { background:#f1f5f9; padding:.12rem .3rem; border-radius:4px; font-size:.88em; }
-  pre { background:#0f172a; color:#e2e8f0; padding:1rem; border-radius:10px; overflow:auto; font-size:.86rem; line-height:1.55; }
+  pre { background:#0f172a; color:#e2e8f0; padding:1rem; border-radius:12px; overflow:auto; font-size:.84rem; line-height:1.6; box-shadow:inset 0 1px 0 rgba(255,255,255,.06); }
   pre code { background:transparent; padding:0; color:inherit; }
-  img { max-width:100%; border:1px solid var(--line); border-radius:10px; margin:.6rem 0 1.2rem; box-shadow:0 4px 18px rgba(15,23,42,.06); }
+  img { max-width:100%; border:1px solid var(--line); border-radius:12px; margin:.6rem 0 1.2rem; box-shadow:0 8px 24px rgba(15,23,42,.08); transition:transform .18s, box-shadow .18s; }
+  img:hover { transform:translateY(-2px); box-shadow:0 14px 32px rgba(15,23,42,.14); }
   hr { border:none; border-top:1px solid var(--line); margin:2rem 0; }
   ul, ol { padding-left:1.5rem; }
   li { margin:.3rem 0; }
-  .top-note { color:var(--muted); font-size:.9rem; margin-bottom:1.4rem; }
+  @media (max-width: 1100px) {
+    .hero-inner { grid-template-columns:1fr; }
+    .hero-pipeline { flex-direction:row; flex-wrap:wrap; }
+    .hp-arrow { display:none; }
+    .kpi-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .boundary-grid, .case-grid { grid-template-columns:1fr; }
+  }
   @media (max-width: 980px) {
     .layout { display:block; }
     .sidebar { position:relative; width:auto; height:auto; max-height:38vh; }
-    .content-inner { padding:28px 18px 60px; }
-  }
-  @media (max-width: 720px) {
-    h1 { font-size:1.6rem; }
-    table { font-size:.82rem; }
+    .content-inner { padding:24px 18px 60px; }
+    .hero { padding:24px 20px; border-radius:16px; }
+    .hero h1 { font-size:1.75rem; }
+    .content-inner > .viz, .kpi-grid { margin-top:18px; }
+    .flow { flex-direction:column; }
+    .flow-step { width:100%; }
+    .flow-arrow { display:none; }
   }
 </style>
 </head>
@@ -61,20 +154,127 @@
     <div class="nav-subtitle">设计思路文档</div>
     <div class="nav-label">目录</div>
     <nav>
-      <a class="nav-main" href="#0">0. 一句话定位</a><a class="nav-main" href="#1">1. 问题分析</a><a class="nav-sub" href="#11">1.1 业务背景</a><a class="nav-sub" href="#12">1.2 现状与痛点</a><a class="nav-sub" href="#13">1.3 机会判断</a><a class="nav-sub" href="#14">1.4 成功指标</a><a class="nav-main" href="#2">2. 产品方案</a><a class="nav-sub" href="#21">2.1 产品定位</a><a class="nav-sub" href="#22">2.2 核心流程</a><a class="nav-sub" href="#23">2.3 功能模块</a><a class="nav-sub" href="#24">2.4 输入与输出</a><a class="nav-sub" href="#25-ai">2.5 人机协同设计（人工与 AI 的边界）</a><a class="nav-sub" href="#26">2.6 复核与审计机制</a><a class="nav-main" href="#3-ai">3. AI 应用方式</a><a class="nav-sub" href="#31-ai">3.1 AI 分工与边界</a><a class="nav-sub" href="#32">3.2 模型选择与思考模式</a><a class="nav-sub" href="#33">3.3 场景问答：置信度分流（规划中）</a><a class="nav-main" href="#4">4. 合规话术设计与护栏</a><a class="nav-sub" href="#41">4.1 红线规则</a><a class="nav-sub" href="#42">4.2 生成后校验与双层护栏</a><a class="nav-main" href="#5">5. 三个规定测试案例与实测结果</a><a class="nav-sub" href="#51-1">5.1 案例1：基金经理变更</a><a class="nav-sub" href="#52-2">5.2 案例2：大额申购限制</a><a class="nav-sub" href="#53-3">5.3 案例3：基金分红</a><a class="nav-main" href="#6">6. 效果评估与数据闭环</a><a class="nav-sub" href="#61">6.1 指标</a><a class="nav-sub" href="#62">6.2 当前实测</a><a class="nav-sub" href="#63-badcase">6.3 Badcase 回流（规划）</a><a class="nav-main" href="#7-finclaw-skill">7. 与 FinClaw 参考 Skill 的关系</a><a class="nav-sub" href="#71">7.1 借鉴的部分</a><a class="nav-sub" href="#72">7.2 刻意不同的部分</a><a class="nav-main" href="#8">8. 技术实现</a><a class="nav-sub" href="#81">8.1 架构</a><a class="nav-sub" href="#82">8.2 数据与规则</a><a class="nav-sub" href="#83">8.3 部署</a><a class="nav-sub" href="#84">8.4 安全与密钥</a><a class="nav-main" href="#9">9. 局限与迭代路线</a><a class="nav-sub" href="#91">9.1 当前局限</a><a class="nav-sub" href="#92">9.2 迭代路线</a><a class="nav-main" href="#10">10. 运行与复现</a><a class="nav-sub" href="#101">10.1 本地运行</a><a class="nav-sub" href="#102">10.2 公网体验</a><a class="nav-sub" href="#103">10.3 测试</a><a class="nav-sub" href="#104">10.4 截图</a><a class="nav-main" href="#11_1">11. 如实说明</a><a class="nav-main" href="#_2">附录：目录结构</a>
+      <a class="nav-main" href="#0">0. 一句话定位</a><a class="nav-main" href="#1">1. 问题分析</a><a class="nav-sub" href="#11">1.1 业务背景</a><a class="nav-sub" href="#12">1.2 现状与痛点</a><a class="nav-sub" href="#13">1.3 机会判断</a><a class="nav-sub" href="#14">1.4 成功指标</a><a class="nav-main" href="#2">2. 产品方案</a><a class="nav-sub" href="#21">2.1 产品定位</a><a class="nav-sub" href="#22">2.2 核心流程</a><a class="nav-sub" href="#23">2.3 功能模块</a><a class="nav-sub" href="#24">2.4 输入与输出</a><a class="nav-sub" href="#25-ai">2.5 人机协同设计（人工与 AI 的边界）</a><a class="nav-sub" href="#26">2.6 复核与审计机制</a><a class="nav-main" href="#3-ai">3. AI 应用方式</a><a class="nav-sub" href="#31-ai">3.1 AI 分工与边界</a><a class="nav-sub" href="#32">3.2 模型选择与思考模式</a><a class="nav-main" href="#4">4. 合规话术设计与护栏</a><a class="nav-sub" href="#41">4.1 红线规则</a><a class="nav-sub" href="#42">4.2 生成后校验与双层护栏</a><a class="nav-main" href="#5">5. 三个规定测试案例与实测结果</a><a class="nav-sub" href="#51-1">5.1 案例1：基金经理变更</a><a class="nav-sub" href="#52-2">5.2 案例2：大额申购限制</a><a class="nav-sub" href="#53-3">5.3 案例3：基金分红</a><a class="nav-main" href="#6">6. 效果评估与数据闭环</a><a class="nav-sub" href="#61">6.1 指标</a><a class="nav-sub" href="#62">6.2 当前实测</a><a class="nav-sub" href="#63-badcase">6.3 Badcase 回流（规划）</a><a class="nav-main" href="#7-finclaw-skill">7. 与 FinClaw 参考 Skill 的关系</a><a class="nav-sub" href="#71">7.1 借鉴的部分</a><a class="nav-sub" href="#72">7.2 刻意不同的部分</a><a class="nav-main" href="#8">8. 技术实现</a><a class="nav-sub" href="#81">8.1 架构</a><a class="nav-sub" href="#82">8.2 数据与规则</a><a class="nav-sub" href="#83">8.3 部署</a><a class="nav-sub" href="#84">8.4 安全与密钥</a><a class="nav-main" href="#9">9. 局限与迭代路线</a><a class="nav-sub" href="#91">9.1 当前局限</a><a class="nav-sub" href="#92">9.2 迭代路线</a><a class="nav-main" href="#10">10. 运行与复现</a><a class="nav-sub" href="#101">10.1 本地运行</a><a class="nav-sub" href="#102">10.2 公网体验</a><a class="nav-sub" href="#103">10.3 测试</a><a class="nav-sub" href="#104">10.4 截图</a><a class="nav-main" href="#11_1">11. 如实说明</a><a class="nav-main" href="#_2">附录：目录结构</a>
       <a class="back-top" href="#top">回到顶部 ↑</a>
     </nav>
   </aside>
   <main class="content" id="top">
     <div class="content-inner">
-      <div class="top-note">AI 笔试提交材料 · 设计思路文档 · 配套 Demo 与截图见文末</div>
-      <h1 id="_1">基金公告运营助手：设计思路文档</h1>
-<blockquote>
-<p>岗位：AI 产品经理（2027 届金融科技专场）｜日期：2026 年 10 月 17 日｜全部产品、人物与数据均为考试虚构材料</p>
-</blockquote>
+      
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="hero-kicker">AI 产品经理 · 2027 届金融科技专场</div>
+      <h1>基金公告运营助手</h1>
+      <p class="hero-sub">上传一份公告，自动完成结构化理解、影响判断、多角色材料生成与合规复核。</p>
+      <div class="hero-tags">
+        <span>DeepSeek V4.1 Flash</span>
+        <span>Streamlit</span>
+        <span>规则引擎</span>
+        <span>人机协同</span>
+        <span>可追溯</span>
+      </div>
+      <div class="hero-actions">
+        <a class="hero-btn primary" href="#5">查看三案例实测</a>
+        <a class="hero-btn ghost" href="https://fund-announcement-assistant.streamlit.app/" target="_blank" rel="noopener">打开在线 Demo</a>
+      </div>
+    </div>
+    <div class="hero-pipeline">
+      <div class="hp-item blue"><span>01</span>AI 理解</div>
+      <div class="hp-arrow">→</div>
+      <div class="hp-item green"><span>02</span>规则计算</div>
+      <div class="hp-arrow">→</div>
+      <div class="hp-item amber"><span>03</span>人复核</div>
+    </div>
+  </div>
+</section>
+
+      
+<section class="kpi-grid">
+  <div class="kpi">
+    <div class="kpi-top"><span class="kpi-num">14/14</span><span class="kpi-badge green">自检</span></div>
+    <div class="kpi-label">三个规定案例通过</div>
+    <div class="kpi-bar"><i style="width:100%"></i></div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-top"><span class="kpi-num">11/11</span><span class="kpi-badge blue">边界</span></div>
+    <div class="kpi-label">金额 / 时间边界测试</div>
+    <div class="kpi-bar"><i style="width:100%"></i></div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-top"><span class="kpi-num">0</span><span class="kpi-badge green">合规</span></div>
+    <div class="kpi-label">三个案例违规项</div>
+    <div class="kpi-bar"><i class="ok" style="width:100%"></i></div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-top"><span class="kpi-num">6–8s</span><span class="kpi-badge amber">速度</span></div>
+    <div class="kpi-label">单份公告生成草稿</div>
+    <div class="kpi-bar"><i class="warm" style="width:86%"></i></div>
+  </div>
+</section>
+<div class="time-strip"><strong>30–60 分钟</strong> 人工整理 <span>→</span> <strong>6–8 秒</strong> AI 生成草稿，人只做复核与签批。</div>
+
+      
+<section class="viz">
+  <div class="viz-head">
+    <div><span class="viz-kicker">CORE FLOW</span><h2 class="viz-title">一图看懂核心流程</h2></div>
+    <span class="viz-note">输入 → AI 能力 → 输出</span>
+  </div>
+  <div class="flow">
+    <div class="flow-step"><span class="flow-num">01</span><strong>公告输入</strong><small>上传 / 粘贴 / 示例</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="flow-num">02</span><strong>类型识别 + 抽取</strong><small>字段 + 原文引用</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="flow-num">03</span><strong>规则计算</strong><small>金额 / 日期 / 份额</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="flow-num">04</span><strong>运营要点</strong><small>影响范围 + 跟踪</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="flow-num">05</span><strong>多角色材料</strong><small>客服 / App / 渠道</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="flow-num">06</span><strong>合规扫描</strong><small>禁语 + 数字核对</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span class="flow-num">07</span><strong>人工复核</strong><small>导出 + 留痕</small></div>
+  </div>
+</section>
+
+      
+<section class="viz">
+  <div class="viz-head">
+    <div><span class="viz-kicker">HUMAN + AI</span><h2 class="viz-title">AI 做什么，人做什么</h2></div>
+    <span class="viz-note">分级自动化 + 人在回路</span>
+  </div>
+  <div class="boundary-grid">
+    <div class="boundary-card green">
+      <div class="boundary-tag">AI 放开做</div>
+      <h3>理解与备料</h3>
+      <p>公告分类 · 字段抽取 · 运营速览 · 内部清单</p>
+    </div>
+    <div class="boundary-card amber">
+      <div class="boundary-tag">半自动</div>
+      <h3>对外文案</h3>
+      <p>客服话术 · App 文案<br><strong>必须人工审核后才可发布</strong></p>
+    </div>
+    <div class="boundary-card red">
+      <div class="boundary-tag">禁区</div>
+      <h3>不做判断</h3>
+      <p>离任归因 · 涨跌预测 · 收益承诺 · 恢复时间承诺</p>
+    </div>
+  </div>
+</section>
+
+      
+<section class="viz">
+  <div class="viz-head">
+    <div><span class="viz-kicker">TEST CASES</span><h2 class="viz-title">三个规定案例</h2></div>
+    <span class="viz-note">实际运行结果见第 5 节</span>
+  </div>
+  <div class="case-grid"><a class="case-card" href="#51-1"><span class="case-tag blue">案例 1</span><h3>基金经理变更</h3><p>李明离任、张晨继续管理；处理“业绩归因/涨跌预测”敏感问题。</p><span class="case-link">查看实测 →</span></a><a class="case-card" href="#52-2"><span class="case-tag amber">案例 2</span><h3>大额申购限制</h3><p>20,000 元/月定投是否受影响；恢复时间未公告，不能承诺。</p><span class="case-link">查看实测 →</span></a><a class="case-card" href="#53-3"><span class="case-tag green">案例 3</span><h3>基金分红</h3><p>25,000 份分红 750 元；16:00 变更申请是否来得及。</p><span class="case-link">查看实测 →</span></a></div>
+</section>
+
+      
 <h2 id="0">0. 一句话定位</h2>
 <p><strong>基金公告运营助手：上传一份公告，自动完成结构化理解、影响判断、多角色材料生成与合规复核；运营人员只需审核和发布。</strong></p>
-<p>当前 Demo 聚焦“单份公告”的完整核心流程；批量解析、场景问答置信度分流等能力列入路线图。</p>
+<p>当前 Demo 聚焦“单份公告”的完整核心流程；批量解析等能力列入路线图。</p>
 <h2 id="1">1. 问题分析</h2>
 <h3 id="11">1.1 业务背景</h3>
 <p>公募基金公司会持续发布基金经理变更、申购限制、基金分红等不同类型公告。公告发布后，运营人员需要：阅读公告 → 理解内容 → 根据用户可能关心的问题准备运营与客服材料。不同公告涉及的业务、用户和后续处理方式差异很大，且公告往往集中发布。</p>
@@ -202,14 +402,8 @@
 <td>人工审核确认 → 导出交付 → 操作留痕（可审计）</td>
 <td>人</td>
 </tr>
-<tr>
-<td>STEP 8 场景问答（规划中）</td>
-<td>用户画像匹配 → 置信度判定：高置信 AI 直接答/低置信转人工/红线拦截</td>
-<td>AI 建议 + 人确认</td>
-</tr>
 </tbody>
 </table>
-<p>STEP 8 的完整置信度分流未在本 Demo 实现；当前由“用户 FAQ + 敏感问题处理”覆盖简化版。</p>
 <p>流程遵循“输入 → AI 能力 → 输出”的表达规范，每一步明确标注由 AI 完成、由人完成、还是人机协作。</p>
 <h3 id="23">2.3 功能模块</h3>
 <p><strong>第一层 · 公告理解引擎（解决“读公告太慢”）</strong></p>
@@ -239,7 +433,6 @@
 <p><strong>横切能力（贯穿三层）</strong></p>
 <ul>
 <li>人机协同审核流：AI 产出全部为“待审核”，按风险分级流转（低/中/高），全链路留痕</li>
-<li>场景问答：输入用户场景，意图识别 → 风险与置信度判定 → 分流生成合规回复（规划中；当前以 FAQ + 敏感问题处理覆盖）</li>
 </ul>
 <h3 id="24">2.4 输入与输出</h3>
 <p><strong>输入</strong></p>
@@ -369,21 +562,6 @@
 <li>本 Demo 对“结构化抽取 + 运营文案”默认关闭思考模式（<code>DEEPSEEK_THINKING=disabled</code>），实测单份公告约 6–8 秒；复杂公告或深度分析可通过 <code>.env</code> 改为 <code>enabled</code>。</li>
 <li>关闭的是显式思考链，不是换模型；金额、日期、份额等关键计算仍由规则引擎保证。</li>
 </ul>
-<h3 id="33">3.3 场景问答：置信度分流（规划中）</h3>
-<p>借鉴 AI 客服的最佳实践（意图识别 → 置信度判断 → 高低分流 → Badcase 回流），结合金融场景的“风险等级”维度，规划如下分流：</p>
-<pre><code class="language-text">用户问题
-   │
-   ▼
-意图识别（离任原因/涨跌/恢复时间/分红方式/费用/其他）
-   │
-   ▼
-风险判定（高/中/低）
-   │
-   ├── 高风险：命中“归因/预测/承诺”红线 → 固定合规口径 + 转人工
-   ├── 中风险：高置信 → AI 草稿 + 人工确认；低置信 → 转人工
-   └── 低风险：高置信 → AI 直接答；低置信 → 转人工
-</code></pre>
-<p>本 Demo 尚未实现完整的置信度分流；当前以“敏感问题处理 + FAQ + 合规检查”覆盖核心场景，完整分流列入路线图。</p>
 <h2 id="4">4. 合规话术设计与护栏</h2>
 <h3 id="41">4.1 红线规则</h3>
 <table>
@@ -744,7 +922,6 @@ Streamlit 工作台（app.py）
 <ol>
 <li><strong>公告类型覆盖</strong>：完整规则覆盖基金经理变更、限购、分红三类高频公告；其他类型可走“其他公告（通用抽取）”并转人工复核，清盘、持有人大会、合同修订、费率调整等专用规则仍待扩展。架构按类型路由，新增类型只需补充抽取 Schema、规则和话术模板。</li>
 <li><strong>批量处理未实现</strong>：当前为单份公告流程；批量上传/汇总列入路线图。</li>
-<li><strong>场景问答置信度分流未实现</strong>：当前以 FAQ + 敏感问题处理覆盖；完整分流列入路线图。</li>
 <li><strong>数据源未接入</strong>：没有真实公告订阅、注册登记机构、销售机构接口；“恢复公告监控”未实现。</li>
 <li><strong>解析能力有限</strong>：PDF 表格、扫描件 OCR、跨页公告可能抽取不完整。</li>
 <li><strong>AI 波动</strong>：同一公告不同次生成措辞可能不同；已用规则校验和安全回退降低风险，但仍需人工复核。</li>
@@ -772,7 +949,7 @@ Streamlit 工作台（app.py）
 <li>生成渠道通知任务和客服工单</li>
 <li>接入 CRM/企微/App 内容系统</li>
 <li>反馈闭环：人工修改记录回流，优化 Prompt 和模板</li>
-<li>场景问答置信度分流 + Badcase 回流</li>
+<li>Badcase 回流</li>
 </ul>
 <p><strong>P3（质量与规模化）</strong></p>
 <ul>
@@ -822,7 +999,7 @@ python tests/test_boundaries.py
 <li>未接入真实注册登记机构、销售机构、公告源系统；“恢复时间”“除息后净值”等公告未披露信息只提示缺失，不编造。</li>
 <li>AI 实时生成存在措辞波动；系统会做规则校验，高风险时自动回退安全模板，但仍需人工复核。</li>
 <li>当前完整规则覆盖三类高频公告；其他类型可走“其他公告（通用抽取）”并转人工复核，新增专用类型可继续扩展。</li>
-<li>批量处理、场景问答置信度分流、Badcase 回流、恢复公告监控未实现，已列入路线图。</li>
+<li>批量处理、Badcase 回流、恢复公告监控未实现，已列入路线图。</li>
 <li>稳定链接部署在 Streamlit Community Cloud；本地 Quick Tunnel 作为备用，依赖本机进程。</li>
 <li>输出为运营草稿，不构成投资建议，不替代合规/法务的正式审核。</li>
 </ol>
