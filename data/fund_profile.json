@@ -1,0 +1,17 @@
+{
+  "fund_name": "恒远均衡成长混合型证券投资基金",
+  "fund_short_name": "恒远均衡成长混合",
+  "main_code": "019001",
+  "a_code": "019001",
+  "c_code": "019002",
+  "manager_company": "恒远基金管理有限公司",
+  "custodian": "华南商业银行股份有限公司",
+  "inception_date": "2022-08-10",
+  "product_type": "混合型基金",
+  "risk_level": "R3",
+  "original_managers": ["张晨", "李明"],
+  "subscription_status": "正常开放",
+  "regular_investment_status": "正常开放",
+  "default_dividend_method": "现金分红",
+  "dividend_method_note": "投资者可以申请将分红方式变更为红利再投资"
+}
