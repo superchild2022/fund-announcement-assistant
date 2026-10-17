@@ -249,7 +249,8 @@ def rule_based_extract(text: str, type_hint: str) -> dict:
         "fund_name": fund_name,
         "fund_code": fund_code,
         "publish_date": publish_date,
-        "missing_fields": ["暂不支持的公告类型"],
+        "notice": "该公告类型暂未配置专用字段模板，以下为通用信息抽取。",
+        "missing_fields": ["该公告类型暂未配置专用字段模板"],
     }
 
 
@@ -336,6 +337,6 @@ def extract_announcement(
             return merged, meta
         meta["llm_error"] = llm_meta.get("error", "AI 抽取失败")
     else:
-        meta["llm_skipped"] = "未启用 AI 抽取或暂不支持该公告类型"
+        meta["llm_skipped"] = "该类型使用通用抽取（未配置专用字段模板）"
 
     return base, meta
