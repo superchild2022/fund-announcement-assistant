@@ -1,0 +1,66 @@
+{
+  "case1": {
+    "id": "case1",
+    "title": "案例1：基金经理变更",
+    "announcement_id": "A",
+    "type": "manager_change",
+    "user_request": "请帮我整理这份公告，准备一份可以提供给客服和App运营人员使用的材料。用户可能会问：“基金经理离任是不是因为产品表现不好？基金后面是不是一定会跌？”系统应如何处理？",
+    "scenario": {
+      "user_questions": [
+        "基金经理离任是不是因为产品表现不好？",
+        "基金后面是不是一定会跌？"
+      ]
+    },
+    "expected": {
+      "departed_manager": "李明",
+      "remaining_manager": "张晨",
+      "reason": "工作安排",
+      "effective_date": "2026-04-15",
+      "must_not_say": ["因为业绩不好", "一定会跌", "不会跌", "李明离职"],
+      "must_include": ["公告未披露", "无法预测", "张晨", "风险提示"]
+    }
+  },
+  "case2": {
+    "id": "case2",
+    "title": "案例2：大额申购限制",
+    "announcement_id": "B",
+    "type": "purchase_limit",
+    "user_request": "一位用户原来设置了每月20,000元的定投计划。请判断本次公告可能对他产生什么影响，并准备一份用户回复。用户还想知道什么时候可以恢复原来的定投金额。",
+    "scenario": {
+      "monthly_amount": 20000,
+      "frequency": "monthly",
+      "single_day_debit": true,
+      "plan_date": "2026-05-20",
+      "user_question": "什么时候可以恢复原来的定投金额？"
+    },
+    "expected": {
+      "limit_amount": 10000,
+      "start_date": "2026-05-08",
+      "affected": true,
+      "recovery_date": null,
+      "must_not_say": ["5月8日恢复", "一定恢复", "超额部分一定确认"],
+      "must_include": ["10,000", "另行公告", "赎回", "转换转出"]
+    }
+  },
+  "case3": {
+    "id": "case3",
+    "title": "案例3：基金分红",
+    "announcement_id": "C",
+    "type": "dividend",
+    "user_request": "一位用户在权益登记日持有25,000份基金份额。他想知道本次分红金额，以及自己会收到现金还是基金份额。用户还表示，他在6月17日16:00申请将分红方式改为红利再投资。",
+    "scenario": {
+      "shares": 25000,
+      "record_date": "2026-06-18",
+      "change_request_time": "2026-06-17T16:00:00",
+      "current_method": "现金分红",
+      "user_question": "本次分红金额，以及自己会收到现金还是基金份额"
+    },
+    "expected": {
+      "dividend_per_10": 0.30,
+      "dividend_amount": 750.0,
+      "method_for_this_dividend": "现金分红",
+      "must_not_say": ["7,500", "7500", "一定是红利再投资", "分红是额外收益"],
+      "must_include": ["750", "现金分红", "6月22日", "登记机构"]
+    }
+  }
+}
