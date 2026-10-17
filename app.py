@@ -31,6 +31,8 @@ TYPE_OPTIONS = {
     "基金分红": "dividend",
 }
 
+SAMPLE_CASE_MAP = {"A": "case1", "B": "case2", "C": "case3"}
+
 
 def inject_css() -> None:
     st.markdown(
@@ -239,95 +241,239 @@ def render_sidebar(profile: dict, cases: dict, announcements: dict) -> dict:
     }
 
 
-def render_inputs(case: dict, announcements: dict, profile: dict) -> tuple[dict, dict]:
+def render_inputs(announcements: dict, cases: dict, profile: dict) -> tuple[dict, dict, dict, str]:
+    st.markdown("### 1. 上传或粘贴公告")
+    st.caption(
+        "试题要求运营人员上传公告；上传/粘贴是主流程。三个规定案例只是快捷示例，"
+        "载入后公告原文会进入可编辑文本框，仍走同一套抽取、规则计算和生成流程。"
+    )
+
     left, right = st.columns([1.15, 1])
 
     with left:
-        st.markdown("#### 公告输入")
         uploaded = st.file_uploader(
-            "上传公告 PDF / TXT（可选）",
+            "上传公告 PDF / TXT",
             type=["pdf", "txt", "md"],
-            label_visibility="collapsed",
-            key=f"upload_{case['id']}",
+            key="announcement_upload",
         )
-        custom_text = read_uploaded_file(uploaded) if uploaded else ""
+        file_text = read_uploaded_file(uploaded) if uploaded else ""
+        if uploaded:
+            st.success(f"已读取文件：{uploaded.name}（{len(file_text)} 字）")
+            st.caption("上传文件优先；如果要使用示例文本，请先移除上传文件。")
 
-        if custom_text:
-            detected = detect_type(custom_text)
-            type_choice = st.selectbox("公告类型", list(TYPE_OPTIONS), index=0)
+        st.session_state.setdefault("announcement_text", "")
+        announcement_text = st.text_area(
+            "公告原文",
+            height=240,
+            key="announcement_text",
+            label_visibility="collapsed",
+            placeholder="把公告全文粘贴到这里……",
+        )
+
+        st.markdown("**没有文件？载入规定测试案例：**")
+
+        def load_sample(sample_id: str) -> None:
+            st.session_state["announcement_text"] = announcements[sample_id]["full_text"]
+            st.session_state["sample_id"] = sample_id
+            st.session_state["announcement_type_choice"] = "自动识别"
+
+        sample_cols = st.columns(3)
+        for col, sample_id in zip(sample_cols, ("A", "B", "C")):
+            with col:
+                st.button(
+                    f"载入公告 {sample_id}",
+                    key=f"load_sample_{sample_id}",
+                    on_click=load_sample,
+                    args=(sample_id,),
+                    use_container_width=True,
+                )
+        st.caption("载入后仍可在文本框中编辑；修改后按自定义公告处理。")
+
+        text = file_text or announcement_text.strip()
+        detected = detect_type(text) if text else "unknown"
+        if text:
+            type_choice = st.selectbox(
+                "公告类型（自动识别不准时可手动指定）",
+                list(TYPE_OPTIONS),
+                index=0,
+                key="announcement_type_choice",
+            )
             type_hint = TYPE_OPTIONS[type_choice] or detected
-            first_line = next((line.strip() for line in custom_text.splitlines() if line.strip()), "自定义公告")
-            announcement = {
-                "id": "uploaded",
-                "type": type_hint,
-                "type_label": TYPE_LABELS.get(type_hint, "未识别"),
-                "title": first_line[:100],
-                "publish_date": "",
-                "full_text": custom_text,
-            }
             if type_hint == "unknown":
-                st.warning("暂未识别公告类型，请在下方手动选择；当前仅支持三类公告。")
+                st.warning("暂未识别公告类型，请手动选择；当前支持三类公告。")
             else:
-                st.success(f"已载入自定义公告，识别类型：{TYPE_LABELS.get(type_hint, type_hint)}")
+                st.caption(f"识别类型：{TYPE_LABELS.get(type_hint, type_hint)}")
         else:
-            announcement = announcements[case["announcement_id"]]
+            type_hint = "unknown"
 
-        publish = announcement.get("publish_date") or "未识别"
-        st.markdown(
-            f"""
+        sample_id = st.session_state.get("sample_id")
+        sample = announcements.get(sample_id) if sample_id else None
+        is_sample = bool(sample and text == sample["full_text"] and not file_text)
+
+        if file_text:
+            source_label = "上传文件"
+        elif is_sample:
+            source_label = f"示例公告 {sample_id}"
+        elif text:
+            source_label = "粘贴文本"
+        else:
+            source_label = "未输入"
+
+        if is_sample:
+            title = sample["title"]
+            publish = sample.get("publish_date", "")
+        else:
+            title = (
+                next((line.strip() for line in text.splitlines() if line.strip()), "等待输入公告")
+                if text
+                else "等待输入公告"
+            )
+            publish = ""
+
+        announcement = {
+            "id": sample_id if is_sample else "custom",
+            "type": type_hint,
+            "type_label": TYPE_LABELS.get(type_hint, "未识别"),
+            "title": title[:100],
+            "publish_date": publish,
+            "full_text": text,
+        }
+
+        if text:
+            publish_text = publish or "未识别"
+            st.markdown(
+                f"""
 <div class="card">
   {badge(announcement.get("type_label", "公告"), "blue")}
   <div class="card-title">{html.escape(str(announcement.get("title", "")))}</div>
-  <div class="muted">公告送出日期：{html.escape(str(publish))}　·　基金代码：{profile['main_code']} / {profile['c_code']}　·　题目虚构材料</div>
+  <div class="muted">公告送出日期：{html.escape(str(publish_text))}　·　基金代码：{profile['main_code']} / {profile['c_code']}　·　输入来源：{html.escape(source_label)}</div>
 </div>
 """,
-            unsafe_allow_html=True,
-        )
-        with st.expander("查看公告原文", expanded=False):
-            st.text(announcement.get("full_text", ""))
-
-    with right:
-        st.markdown("#### 用户场景")
-        with st.expander("查看本题用户请求", expanded=False):
-            st.write(case.get("user_request", ""))
-
-        scenario_override: dict = {}
-        if case["type"] == "manager_change":
-            st.markdown("**用户可能追问：**")
-            for question in case.get("scenario", {}).get("user_questions", []):
-                st.markdown(f"- {question}")
-            st.markdown(
-                '<div class="small-note">系统需要同时处理“原因推断”和“涨跌预测”两类敏感问题，不能只做摘要。</div>',
                 unsafe_allow_html=True,
             )
-        elif case["type"] == "purchase_limit":
-            monthly = st.number_input("原定投计划金额（元/月）", min_value=0, value=20000, step=1000)
-            single_day = st.checkbox("单日一次性扣款", value=True, help="取消勾选表示分散到多日扣款")
-            plan_date = st.date_input("计划扣款日", value=date(2026, 5, 20))
-            daily = None
-            if not single_day:
-                daily = st.number_input("每日计划扣款金额（元）", min_value=0, value=1000, step=500)
-            scenario_override = {
-                "monthly_amount": monthly,
-                "single_day_debit": single_day,
-                "plan_date": plan_date.isoformat(),
-                "daily_amount": daily,
-            }
-            st.caption("试试取消“单日一次性扣款”，看看影响判断如何变化。")
-        elif case["type"] == "dividend":
-            shares = st.number_input("权益登记日持有份额", min_value=0, value=25000, step=1000)
-            change_date = st.date_input("分红方式变更申请日期", value=date(2026, 6, 17))
-            change_time = st.time_input("申请时间", value=time(16, 0))
-            current_method = st.selectbox("当前分红方式", ["现金分红", "红利再投资"], index=0)
-            scenario_override = {
-                "shares": shares,
-                "record_date": "2026-06-18",
-                "change_request_time": datetime.combine(change_date, change_time).isoformat(),
-                "current_method": current_method,
-            }
-            st.caption("把申请时间改到 15:00 前，系统会给出不同的分红方式判断。")
+            with st.expander("查看公告原文", expanded=False):
+                st.text(text)
+        else:
+            st.info("请上传 PDF/TXT、粘贴公告原文，或点击上方示例按钮载入公告 A/B/C。")
 
-    return announcement, scenario_override
+    with right:
+        st.markdown("### 2. 用户场景")
+        case_type = type_hint if text else "unknown"
+
+        if case_type == "unknown":
+            st.markdown(
+                '<div class="small-note">先上传/粘贴公告，或载入示例公告；系统会根据公告类型显示对应的用户场景输入。</div>',
+                unsafe_allow_html=True,
+            )
+            scenario_override: dict = {}
+            user_request = "用户上传/粘贴公告，请生成运营物料。"
+        else:
+            sample_case = cases.get(SAMPLE_CASE_MAP.get(sample_id, "")) if is_sample else None
+            user_request = (
+                sample_case.get("user_request")
+                if sample_case
+                else "用户上传/粘贴公告，请生成运营物料，并按下方场景判断影响。"
+            )
+            with st.expander("查看用户请求", expanded=False):
+                st.write(user_request)
+
+            scenario_override = {}
+            if case_type == "manager_change":
+                questions = (
+                    (sample_case or {}).get("scenario", {}).get("user_questions")
+                    or ["基金经理为什么离任？", "基金后面会不会跌？"]
+                )
+                st.markdown("**用户可能追问：**")
+                for question in questions:
+                    st.markdown(f"- {question}")
+                st.markdown(
+                    '<div class="small-note">系统需要同时处理“原因推断”和“涨跌预测”两类敏感问题，不能只做摘要。</div>',
+                    unsafe_allow_html=True,
+                )
+            elif case_type == "purchase_limit":
+                default_monthly = 20000 if (is_sample and sample_id == "B") else 10000
+                monthly = st.number_input(
+                    "原定投计划金额（元/月）",
+                    min_value=0,
+                    value=default_monthly,
+                    step=1000,
+                    key="scenario_monthly",
+                )
+                single_day = st.checkbox(
+                    "单日一次性扣款",
+                    value=True,
+                    key="scenario_single_day",
+                    help="取消勾选表示分散到多日扣款",
+                )
+                plan_date = st.date_input(
+                    "计划扣款日",
+                    value=date(2026, 5, 20),
+                    key="scenario_plan_date",
+                )
+                daily = None
+                if not single_day:
+                    daily = st.number_input(
+                        "每日计划扣款金额（元）",
+                        min_value=0,
+                        value=1000,
+                        step=500,
+                        key="scenario_daily",
+                    )
+                scenario_override = {
+                    "monthly_amount": monthly,
+                    "single_day_debit": single_day,
+                    "plan_date": plan_date.isoformat(),
+                    "daily_amount": daily,
+                }
+                st.caption("试试取消“单日一次性扣款”，看看影响判断如何变化。")
+            elif case_type == "dividend":
+                default_shares = 25000 if (is_sample and sample_id == "C") else 10000
+                shares = st.number_input(
+                    "权益登记日持有份额",
+                    min_value=0,
+                    value=default_shares,
+                    step=1000,
+                    key="scenario_shares",
+                )
+                change_date = st.date_input(
+                    "分红方式变更申请日期",
+                    value=date(2026, 6, 17),
+                    key="scenario_change_date",
+                )
+                change_time = st.time_input(
+                    "申请时间",
+                    value=time(16, 0),
+                    key="scenario_change_time",
+                )
+                current_method = st.selectbox(
+                    "当前分红方式",
+                    ["现金分红", "红利再投资"],
+                    index=0,
+                    key="scenario_current_method",
+                )
+                scenario_override = {
+                    "shares": shares,
+                    "record_date": "2026-06-18",
+                    "change_request_time": datetime.combine(change_date, change_time).isoformat(),
+                    "current_method": current_method,
+                }
+                st.caption("把申请时间改到 15:00 前，系统会给出不同的分红方式判断。")
+
+    if is_sample:
+        case_key = SAMPLE_CASE_MAP.get(sample_id, "case1")
+        case = dict(cases[case_key])
+        case["id"] = case_key
+    else:
+        case = {
+            "id": "custom",
+            "title": "自定义公告",
+            "type": type_hint,
+            "user_request": user_request,
+            "scenario": scenario_override,
+            "expected": {},
+        }
+
+    return announcement, scenario_override, case, source_label
 
 
 def render_empty_state() -> None:
@@ -353,7 +499,7 @@ def render_empty_state() -> None:
             unsafe_allow_html=True,
         )
     st.markdown(
-        '<div class="small-note" style="margin-top:1rem;">点击上方“开始处理”运行当前案例；也可以切换三个预置案例，观察不同公告类型的处理差异。</div>',
+        '<div class="small-note" style="margin-top:1rem;">上传/粘贴公告，或点击“载入公告 A/B/C”示例，然后点击“开始处理”。示例公告载入后仍可编辑，处理走同一套流程。</div>',
         unsafe_allow_html=True,
     )
 
@@ -771,15 +917,23 @@ def main() -> None:
     mode = settings["mode"]
     use_ai_compliance = settings["use_ai_compliance"]
 
-    case_labels = [case["title"] for case in cases.values()]
-    selected_label = st.radio("选择测试案例", case_labels, horizontal=True)
-    case = next(case for case in cases.values() if case["title"] == selected_label)
-
-    announcement, scenario_override = render_inputs(case, announcements, profile)
+    announcement, scenario_override, case, source_label = render_inputs(announcements, cases, profile)
 
     st.markdown("")
-    process = st.button("开始处理", type="primary", use_container_width=True)
-    st.caption("AI 负责理解与表达，规则引擎负责金额/日期判断，输出需人工复核。")
+    can_process = bool(announcement.get("full_text")) and announcement.get("type") != "unknown"
+    process = st.button(
+        "开始处理",
+        type="primary",
+        use_container_width=True,
+        disabled=not can_process,
+    )
+    if can_process:
+        st.caption(
+            f"当前输入：{source_label} · {announcement.get('type_label')} · "
+            "AI 负责理解与表达，规则引擎负责金额/日期判断，输出需人工复核。"
+        )
+    else:
+        st.caption("请先上传/粘贴公告，或载入示例公告 A/B/C，并确认公告类型。")
 
     signature = json.dumps(
         {
