@@ -14,7 +14,7 @@
 
 **实际结果**：三个规定案例全部跑通；离线规则自检 14/14 通过；边界测试 11/11 通过；三个案例合规检查 0 项违规；AI 实时模式单份公告约 6–8 秒（DeepSeek V4.1 Flash，默认关闭思考模式）。
 
-**Demo 形态**：Streamlit 工作台，内置三个预置案例，支持自定义 PDF/TXT 上传、AI/离线双模式、人工复核与 Markdown/JSON 导出。
+**Demo 形态**：Streamlit 工作台，内置三个预置案例，支持自定义 PDF/TXT 上传、AI/离线双模式、人工复核与 Markdown/JSON 导出。稳定体验链接：https://fund-announcement-assistant.streamlit.app/
 
 ## 1. 问题定义
 
@@ -99,7 +99,7 @@
 ### 2.3 输入与输出
 
 **输入**
-- 公告原文：PDF / TXT / Markdown，或内置公告 A/B/C。
+- 公告原文：上传 PDF / TXT / Markdown，或直接粘贴文本；三个规定案例可通过“载入公告 A/B/C”快捷填入。
 - 产品基本资料：基金名称、代码、A/C 份额、风险等级、默认分红方式等。
 - 用户场景：定投金额、持有份额、申请时间等。
 
@@ -115,6 +115,16 @@
 9. 后续跟踪清单
 10. 处理日志（抽取方式、模型用量、耗时）
 
+### 2.3.1 上传模块与三个规定案例的关系
+
+试题原文是“运营人员上传公告 A/B/C”，因此本 Demo 把**上传/粘贴作为主流程**，而不是只做三个预置按钮。
+
+- 页面第一入口是“上传公告 PDF/TXT”和“粘贴公告原文”。
+- 三个规定案例做成“载入公告 A/B/C”快捷按钮：点击后公告原文会填入**可编辑文本框**，再走同一套“类型识别 → 抽取 → 规则计算 → 生成 → 合规检查”管线。
+- 示例按钮只负责填入公告原文，不产生预置答案；结果均为运行期生成。
+- 如果修改了示例文本，系统按自定义公告处理。
+- 这样既能满足试题“上传公告”的交互要求，也方便评审快速复现三个规定案例。
+
 ### 2.4 人工复核与审计
 
 - 所有输出明确标注为“运营草稿”，必须人工复核。
@@ -125,7 +135,7 @@
 ### 2.5 页面结构
 
 - 左侧：运行设置、产品资料、三案例自检、如实说明。
-- 主区：案例选择、公告输入、用户场景、开始处理。
+- 主区：上传/粘贴公告、载入示例公告、公告类型确认、用户场景、开始处理。
 - 结果区五个 Tab：
   1. 运营工作台（事实卡 + 规则判断 + 影响范围 + 缺失信息 + 敏感问题）
   2. 客服物料（短口径 + 完整回复）
@@ -472,7 +482,7 @@ AI 复核（可选）：
 4. **解析能力有限**：PDF 表格、扫描件 OCR、跨页公告可能抽取不完整。
 5. **AI 波动**：同一公告不同次生成措辞可能不同；已用规则校验和安全回退降低风险，但仍需人工复核。
 6. **未做真实用户评估**：人工修改率、客服采纳率、一次解决率尚未量化。
-7. **公网链接为临时隧道**：依赖本机进程，面试结束前需保持运行。
+7. **公网链接**：稳定链接已部署到 Streamlit Community Cloud；本地 Quick Tunnel 作为备用，依赖本机进程。
 
 ### 8.2 迭代路线
 
@@ -531,13 +541,25 @@ streamlit run app.py
 
 ### 9.4 公网体验
 
+**稳定公网链接（Streamlit Community Cloud）：**
+
+**https://fund-announcement-assistant.streamlit.app/**
+
+代码仓库：
+
+**https://github.com/superchild2022/fund-announcement-assistant**
+
+![Streamlit Cloud 稳定部署](screenshots/12_streamlit_cloud.png)
+
+本地/临时备用方案：
+
 ```powershell
 .\start_public.ps1
 ```
 
 脚本会启动本地 Streamlit 和 Cloudflare Quick Tunnel，并打印 `https://*.trycloudflare.com` 链接。保持窗口打开，链接即可访问。
 
-当前临时链接（以实际运行输出为准）：
+当前临时备用链接（以实际运行输出为准）：
 
 **https://obtain-impacts-somerset-relay.trycloudflare.com**
 
@@ -561,6 +583,7 @@ python tests/test_boundaries.py
 - `docs/screenshots/05b_case2_cs.png`
 - `docs/screenshots/06_case3_workbench.png`
 - `docs/screenshots/07_case3_cs.png`
+- `docs/screenshots/12_streamlit_cloud.png`
 
 ## 10. 如实说明
 
@@ -569,8 +592,9 @@ python tests/test_boundaries.py
 3. 三个案例的规则判断可离线复现；离线模式不调用大模型。
 4. 未接入真实注册登记机构、销售机构、公告源系统；“恢复时间”“除息后净值”等公告未披露信息只提示缺失，不编造。
 5. AI 实时生成存在措辞波动；系统会做规则校验，高风险时自动回退安全模板，但仍需人工复核。
-6. 公网链接为临时 Quick Tunnel，依赖本机进程；如失效请重新运行 `start_public.ps1`。
-7. 输出为运营草稿，不构成投资建议，不替代合规/法务的正式审核。
+6. 稳定链接部署在 Streamlit Community Cloud；本地 Quick Tunnel 作为备用，依赖本机进程，如失效可重新运行 `start_public.ps1`。
+7. 三个规定案例的“载入公告 A/B/C”只是把公告原文填入可编辑文本框，不是预置答案；处理仍走同一套抽取、规则和生成管线。
+8. 输出为运营草稿，不构成投资建议，不替代合规/法务的正式审核。
 
 ## 附录：目录结构
 
