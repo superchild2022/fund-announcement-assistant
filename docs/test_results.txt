@@ -1,0 +1,52 @@
+﻿=== 三案例自检（离线规则） ===
+================================================================================
+案例1：基金经理变更
+headline: 李明因工作安排离任，张晨继续管理
+impact: 李明离任本基金基金经理，自2026年4月15日起生效；本基金仍由张晨管理。
+extraction: 规则抽取 | generation: 安全模板 | compliance: 低
+cs_short: 根据公告，李明先生因工作安排离任本基金基金经理，自2026年4月15日起生效，相关手续已办理；本基金仍由张晨先生管理。公告未披露与业绩相关的原因，也无法据此判断未来涨跌。基金有风险，投资需谨慎。
+  [PASS] 离任基金经理: actual=李明 expected=李明
+  [PASS] 继续管理的基金经理: actual=['张晨'] expected=张晨
+  [PASS] 离任原因: actual=工作安排 expected=工作安排
+  [PASS] 生效日期: actual=2026-04-15 expected=2026-04-15
+  [PASS] 客服回复包含张晨: actual=True expected=True
+  [PASS] 客服回复不推断业绩: actual=无禁语 expected=True
+violations: []
+================================================================================
+案例2：大额申购限制
+headline: 单日定投超过 10,000.00 元，可能被拒绝
+impact: 单日单账户一次性扣款 20,000.00 元，超过限额 10,000.00 元；管理人有权拒绝相关业务申请。
+extraction: 规则抽取 | generation: 安全模板 | compliance: 低
+cs_short: 您20,000元/月的定投，如在2026年5月8日及以后单日单账户累计超过10,000元，管理人有权拒绝。建议将单日金额调整到10,000元（含）以内，或确认渠道是否支持拆分到不同交易日；赎回和转换转出不受影响。恢复时间尚未公告，请关注官方通知。基金有风险，投资需谨慎。
+  [PASS] 限制金额: actual=10000 expected=10000
+  [PASS] 限制起始日: actual=2026-05-08 expected=2026-05-08
+  [PASS] 用户受影响判断: actual=True expected=True
+  [PASS] 恢复日期未编造: actual=None expected=None
+violations: []
+================================================================================
+案例3：基金分红
+headline: 本次分红 750.00 元，按规则判断为现金分红
+impact: 按公告方案，25,000 份分红 750.00 元；本次按规则判断为现金分红。申请时间 16:00 已超过工作日交易时间（通常为 15:00）；申请大概率于下一交易日（2026年6月18日权益登记日）处理，晚于“权益登记日前”的要求，本次变更大概率无法生效，分红方式仍按当前选择（现金分红）。
+extraction: 规则抽取 | generation: 安全模板 | compliance: 低
+cs_short: 按每10份派0.30元计算，25,000份分红750元。您默认现金分红；6月17日16:00的变更已过交易时间，本次大概率仍为现金分红，6月22日发放。最终以登记机构记录为准，建议在App确认。基金有风险，投资需谨慎。
+  [PASS] 每10份分红: actual=0.3 expected=0.3
+  [PASS] 分红金额: actual=750.0 expected=750.0
+  [PASS] 本次分红方式: actual=现金分红 expected=现金分红
+  [PASS] 客服回复金额正确: actual=含750且不含7500 expected=True
+violations: []
+================================================================================
+failures: 0
+
+=== 边界条件测试 ===
+[PASS] 20,000 单日扣款受影响: actual=True expected=True
+[PASS] 10,000 单日扣款不受影响: actual=False expected=False
+[PASS] 10,000.01 单日扣款受影响: actual=True expected=True
+[PASS] 每日1,000分散扣款不受影响: actual=False expected=False
+[PASS] 16:00 本次现金分红: actual='现金分红' expected='现金分红'
+[PASS] 25,000份分红750元: actual=750.0 expected=750.0
+[PASS] 当前已是红利再投资，16:00变更失效后仍为红利再投资: actual='红利再投资' expected='红利再投资'
+[PASS] 14:00 可改红利再投资: actual='红利再投资' expected='红利再投资'
+[PASS] 6月18日申请本次现金分红: actual='现金分红' expected='现金分红'
+[PASS] 基金经理变更后不是无人管理: actual=False expected=False
+[PASS] 事件不是基金终止: actual=False expected=False
+failures: []
