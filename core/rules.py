@@ -442,6 +442,54 @@ def analyze_dividend(extracted: dict, scenario: dict, profile: dict) -> dict:
     }
 
 
+def analyze_generic(extracted: dict, scenario: dict, profile: dict) -> dict:
+    fact_card = [
+        {"label": "公告类型", "value": "其他公告（通用抽取）"},
+        {"label": "基金名称", "value": extracted.get("fund_name") or profile.get("fund_name")},
+        {"label": "基金代码", "value": extracted.get("fund_code") or profile.get("main_code")},
+        {"label": "公告送出日期", "value": extracted.get("publish_date") or "未识别"},
+        {"label": "处理边界", "value": "该类型暂未配置专用抽取模板和规则，仅做通用信息抽取"},
+    ]
+    return {
+        "type": "other",
+        "headline": "公告已读取，该类型暂未配置专用规则",
+        "fact_card": fact_card,
+        "impact": {
+            "summary": "该公告类型暂未配置专用抽取模板和规则；系统仅提供通用信息，建议人工阅读全文并复核。",
+            "affected": None,
+        },
+        "impact_level": "待评估",
+        "impact_rationale": "缺少该公告类型的专用规则和字段模板，不能自动判断影响。",
+        "stakeholder_impact": {
+            "产品/运营": "人工阅读公告全文，确认是否需要更新页面、系统或渠道口径。",
+            "客户": "暂无自动客服口径，需人工判断。",
+            "渠道": "如需通知渠道，先由运营/合规确认公告影响。",
+            "合规": "通用抽取结果不作为对外口径，需人工复核。",
+        },
+        "follow_up": [
+            "人工阅读公告全文并确认公告类型",
+            "如需长期支持，补充该类型的抽取 Schema、规则和话术模板",
+        ],
+        "rule_trace": [
+            "公告类型不在当前内置的三类高频模板中",
+            "仅做通用字段抽取（基金名称、代码、公告日期）",
+            "未执行金额/日期/份额等专用规则判断",
+            "输出仅为通用信息，需人工复核",
+        ],
+        "missing_info": [
+            "该公告类型暂未配置专用字段模板",
+            "该公告类型暂未配置专用规则和客服口径",
+            "公告全文中的关键金额、日期、适用范围需人工确认",
+        ],
+        "compliance_notes": [
+            "通用抽取结果不作为对外发布口径",
+            "不得基于通用抽取结果预测涨跌或承诺收益",
+            "对外材料需人工复核",
+        ],
+        "must_not_say": ["保证收益", "稳赚", "必涨", "不会跌"],
+    }
+
+
 def analyze(extracted: dict, scenario: dict, profile: dict) -> dict:
     type_ = extracted.get("type")
     if type_ == "manager_change":
@@ -450,4 +498,6 @@ def analyze(extracted: dict, scenario: dict, profile: dict) -> dict:
         return analyze_purchase_limit(extracted, scenario, profile)
     if type_ == "dividend":
         return analyze_dividend(extracted, scenario, profile)
+    if type_ == "other":
+        return analyze_generic(extracted, scenario, profile)
     raise ValueError(f"暂不支持的公告类型：{type_}")
