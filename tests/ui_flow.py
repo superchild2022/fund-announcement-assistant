@@ -31,10 +31,14 @@ def main() -> None:
             lambda msg: errors.append(f"console {msg.type}: {msg.text}") if msg.type == "error" else None,
         )
         page.goto("http://localhost:8501", wait_until="domcontentloaded", timeout=60000)
-        page.wait_for_selector("text=基金公告运营助手", timeout=60000)
+        page.wait_for_selector("text=1. 上传或粘贴公告", timeout=60000)
         page.wait_for_timeout(1500)
+        shot(page, "01_home.png")
 
-        # Case 1
+        # Case 1: 载入示例公告 A
+        page.get_by_role("button", name="载入公告 A").click()
+        page.get_by_text("恒远均衡成长混合型证券投资基金基金经理变更公告", exact=True).first.wait_for(timeout=60000)
+        page.wait_for_timeout(800)
         click_process(page)
         page.get_by_text("公告事实卡", exact=True).first.wait_for(timeout=120000)
         page.get_by_text("影响等级", exact=False).first.wait_for(timeout=60000)
@@ -56,8 +60,9 @@ def main() -> None:
         page.wait_for_timeout(600)
         shot(page, "04b_case1_logs.png")
 
-        # Case 2
-        page.get_by_text("案例2：大额申购限制", exact=True).first.click()
+        # Case 2: 载入示例公告 B
+        page.get_by_role("button", name="载入公告 B").click()
+        page.get_by_text("恒远均衡成长混合型证券投资基金限制大额申购、定期定额投资和转换转入业务的公告", exact=True).first.wait_for(timeout=60000)
         page.get_by_text("单日一次性扣款", exact=True).first.wait_for(timeout=60000)
         page.wait_for_timeout(600)
         click_process(page)
@@ -70,8 +75,9 @@ def main() -> None:
         page.wait_for_timeout(600)
         shot(page, "05b_case2_cs.png")
 
-        # Case 3
-        page.get_by_text("案例3：基金分红", exact=True).first.click()
+        # Case 3: 载入示例公告 C
+        page.get_by_role("button", name="载入公告 C").click()
+        page.get_by_text("恒远均衡成长混合型证券投资基金2026年度第一次分红公告", exact=True).first.wait_for(timeout=60000)
         page.get_by_text("权益登记日持有份额", exact=True).first.wait_for(timeout=60000)
         page.wait_for_timeout(600)
         click_process(page)
